@@ -1,0 +1,18 @@
+# Around the World in 80 Plates — dependencies
+# App
+streamlit>=1.39
+
+# Data access
+SQLAlchemy>=2.0
+pandas>=2.2
+
+# Visualization
+plotly>=5.24
+pydeck>=0.9
+altair>=5.4
+
+# Analytics
+scikit-learn>=1.5
+duckdb>=1.1
+geopandas>=1.0
+requests>=2.32

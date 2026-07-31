@@ -1,0 +1,16 @@
+[server]
+headless = true
+enableStaticServing = true
+
+[browser]
+gatherUsageStats = false
+
+[client]
+toolbarMode = "minimal"
+
+[theme]
+base = "light"
+primaryColor = "#C0392B"
+backgroundColor = "#FFF8F1"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#2A2320"

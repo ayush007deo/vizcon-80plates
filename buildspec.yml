@@ -1,0 +1,17 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin 046176761524.dkr.ecr.us-west-2.amazonaws.com
+  build:
+    commands:
+      - echo Building Docker image...
+      - docker build --platform linux/amd64 -t vizcon-80plates:latest .
+      - docker tag vizcon-80plates:latest 046176761524.dkr.ecr.us-west-2.amazonaws.com/vizcon-80plates:latest
+  post_build:
+    commands:
+      - echo Pushing to ECR...
+      - docker push 046176761524.dkr.ecr.us-west-2.amazonaws.com/vizcon-80plates:latest
+      - echo Done.

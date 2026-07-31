@@ -1,0 +1,135 @@
+iso3,dish,course,taste_tags
+IND,Butter Chicken,main,spicy|healthy
+IND,Biryani,main,spicy|street food
+IND,Masala Dosa,main,vegetarian|street food|healthy
+IND,Gulab Jamun,dessert,sweet
+IND,Masala Chai,drink,sweet
+JPN,Sushi,main,seafood|healthy
+JPN,Ramen,main,street food
+JPN,Miso Soup,starter,healthy|seafood
+JPN,Mochi,dessert,sweet
+JPN,Matcha,drink,healthy
+ITA,Margherita Pizza,main,vegetarian|street food
+ITA,Spaghetti Carbonara,main,
+ITA,Tiramisu,dessert,sweet
+ITA,Espresso,drink,
+MEX,Tacos al Pastor,main,street food|spicy
+MEX,Guacamole,starter,vegetarian|healthy
+MEX,Churros,dessert,sweet|street food
+MEX,Horchata,drink,sweet
+THA,Pad Thai,main,street food|seafood
+THA,Green Curry,main,spicy
+THA,Mango Sticky Rice,dessert,sweet
+THA,Thai Iced Tea,drink,sweet
+FRA,Coq au Vin,main,
+FRA,Ratatouille,main,vegetarian|healthy
+FRA,Croissant,dessert,sweet
+FRA,Crepe,dessert,sweet|street food
+CHN,Peking Duck,main,
+CHN,Dumplings,starter,street food
+CHN,Mapo Tofu,main,vegetarian|spicy
+CHN,Jasmine Tea,drink,healthy
+USA,Cheeseburger,main,street food
+USA,BBQ Ribs,main,
+USA,Apple Pie,dessert,sweet
+USA,Lemonade,drink,sweet
+ETH,Doro Wat,main,spicy
+ETH,Injera,main,vegetarian|healthy
+MAR,Tagine,main,healthy
+MAR,Couscous,main,vegetarian|healthy
+MAR,Mint Tea,drink,sweet|healthy
+BRA,Feijoada,main,
+BRA,Pao de Queijo,starter,vegetarian|street food
+BRA,Brigadeiro,dessert,sweet
+GRC,Moussaka,main,
+GRC,Souvlaki,main,street food
+GRC,Baklava,dessert,sweet
+VNM,Pho,main,street food|healthy|seafood
+VNM,Banh Mi,main,street food
+VNM,Vietnamese Coffee,drink,sweet
+RUS,Borscht,main,healthy
+RUS,Pelmeni,main,
+RUS,Beef Stroganoff,main,
+RUS,Blini,dessert,street food|sweet
+DEU,Bratwurst,main,street food
+DEU,Sauerbraten,main,
+DEU,Pretzel,starter,street food
+DEU,Black Forest Cake,dessert,sweet
+ESP,Paella,main,seafood
+ESP,Gazpacho,starter,vegetarian|healthy
+ESP,Tapas,starter,street food
+ESP,Churros,dessert,sweet|street food
+GBR,Fish and Chips,main,seafood|street food
+GBR,Shepherd's Pie,main,
+GBR,Scones,dessert,sweet
+GBR,Roast Beef,main,
+KOR,Kimchi,starter,healthy|spicy|vegetarian
+KOR,Bibimbap,main,healthy|vegetarian
+KOR,Bulgogi,main,
+KOR,Tteokbokki,main,street food|spicy
+TUR,Kebab,main,street food
+TUR,Meze,starter,vegetarian
+TUR,Baklava,dessert,sweet
+TUR,Turkish Coffee,drink,
+EGY,Koshari,main,vegetarian|street food
+EGY,Ful Medames,main,vegetarian|healthy
+EGY,Molokhia,main,healthy
+EGY,Basbousa,dessert,sweet
+NGA,Jollof Rice,main,spicy
+NGA,Egusi Soup,main,
+NGA,Suya,main,street food|spicy
+NGA,Puff Puff,dessert,street food|sweet
+ARG,Asado,main,
+ARG,Empanadas,starter,street food
+ARG,Milanesa,main,
+ARG,Dulce de Leche,dessert,sweet
+PER,Ceviche,main,seafood|healthy
+PER,Lomo Saltado,main,
+PER,Aji de Gallina,main,spicy
+IDN,Nasi Goreng,main,street food
+IDN,Satay,main,street food
+IDN,Rendang,main,spicy
+IDN,Gado-Gado,main,vegetarian|healthy
+IRN,Chelo Kabab,main,
+IRN,Ghormeh Sabzi,main,healthy
+IRN,Tahdig,main,vegetarian
+IRN,Fesenjan,main,
+LBN,Hummus,starter,vegetarian|healthy
+LBN,Tabbouleh,starter,vegetarian|healthy
+LBN,Shawarma,main,street food
+PRT,Bacalhau,main,seafood
+PRT,Pastel de Nata,dessert,sweet
+PRT,Caldo Verde,starter,healthy
+POL,Pierogi,main,
+POL,Bigos,main,
+POL,Kielbasa,main,street food
+NLD,Stroopwafel,dessert,sweet|street food
+NLD,Bitterballen,starter,street food
+NLD,Haring,starter,seafood
+SWE,Swedish Meatballs,main,
+SWE,Gravlax,starter,seafood
+SWE,Cinnamon Bun,dessert,sweet
+PHL,Adobo,main,
+PHL,Lumpia,starter,street food
+PHL,Sinigang,main,healthy
+PHL,Halo-Halo,dessert,sweet
+MYS,Nasi Lemak,main,
+MYS,Laksa,main,spicy|seafood
+MYS,Roti Canai,main,street food
+PAK,Nihari,main,spicy
+PAK,Haleem,main,
+PAK,Seekh Kebab,main,street food
+BGD,Hilsa Curry,main,seafood
+BGD,Panta Bhat,main,
+BGD,Roshogolla,dessert,sweet
+SAU,Kabsa,main,
+SAU,Falafel,starter,vegetarian|street food
+ZAF,Bobotie,main,
+ZAF,Bunny Chow,main,street food|spicy
+ZAF,Biltong,starter,
+KEN,Ugali,main,
+KEN,Nyama Choma,main,
+KEN,Sukuma Wiki,main,vegetarian|healthy
+COL,Bandeja Paisa,main,
+COL,Arepas,starter,street food|vegetarian
+COL,Ajiaco,main,

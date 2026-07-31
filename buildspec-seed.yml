@@ -1,0 +1,21 @@
+version: 0.2
+
+env:
+  variables:
+    DATABASE_URL: "postgresql+psycopg2://postgres:VizCon2026Plates@vizcon-plates-cluster.cluster-ckkkhhbtyt1c.us-west-2.rds.amazonaws.com:5432/plates"
+    PIP_INDEX_URL: ""
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - apt-get update && apt-get install -y postgresql-client libpq-dev
+      - pip install sqlalchemy psycopg2-binary pandas scikit-learn requests duckdb geopandas
+  build:
+    commands:
+      - echo "Running schema..."
+      - PGPASSWORD=VizCon2026Plates psql -h vizcon-plates-cluster.cluster-ckkkhhbtyt1c.us-west-2.rds.amazonaws.com -U postgres -d plates -f pipeline/schema.sql
+      - echo "Running pipeline..."
+      - python -m pipeline.run_pipeline
+      - echo "Database seeded!"

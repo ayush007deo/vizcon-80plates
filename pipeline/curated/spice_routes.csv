@@ -1,0 +1,31 @@
+spice,seq,location_name,lat,lon,time_period
+Black Pepper,1,Kerala (India),9.93,76.26,Antiquity
+Black Pepper,2,Arabia,21.42,39.83,100 BCE
+Black Pepper,3,Alexandria,31.20,29.92,100 CE
+Black Pepper,4,Rome,41.90,12.50,200 CE
+Black Pepper,5,Venice,45.44,12.34,1200s
+Cardamom,1,Western Ghats (India),10.0,77.0,Antiquity
+Cardamom,2,Persia,32.43,53.68,900s
+Cardamom,3,Scandinavia,59.33,18.06,1100s
+Chocolate,1,Mesoamerica,19.43,-99.13,Pre-1500
+Chocolate,2,Spain,40.42,-3.70,1520s
+Chocolate,3,France,48.85,2.35,1600s
+Chocolate,4,Switzerland,46.95,7.44,1800s
+Coffee,1,Ethiopia,9.15,40.49,800s
+Coffee,2,Yemen (Mocha),13.32,43.25,1400s
+Coffee,3,Ottoman Empire,41.01,28.98,1500s
+Coffee,4,Vienna,48.21,16.37,1680s
+Coffee,5,Brazil,-15.79,-47.88,1720s
+Tea,1,Yunnan (China),25.04,102.71,Antiquity
+Tea,2,Japan,35.68,139.69,800s
+Tea,3,Netherlands,52.37,4.90,1600s
+Tea,4,Britain,51.51,-0.13,1650s
+Tea,5,Assam (India),26.20,92.94,1830s
+Cinnamon,1,Sri Lanka,7.87,80.77,Antiquity
+Cinnamon,2,Arabia,21.42,39.83,1000 BCE
+Cinnamon,3,Alexandria,31.20,29.92,100 CE
+Cinnamon,4,Venice,45.44,12.34,1200s
+Nutmeg,1,Banda Islands,-4.53,129.90,Antiquity
+Nutmeg,2,Arabia,21.42,39.83,800s
+Nutmeg,3,Venice,45.44,12.34,1300s
+Nutmeg,4,Netherlands,52.37,4.90,1600s
