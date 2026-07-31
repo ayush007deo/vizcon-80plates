@@ -31,7 +31,7 @@ _load_dotenv(PROJECT_ROOT / ".env")
 # ---------------------------------------------------------------------------
 DATABASE_URL: str = os.environ.get(
     "DATABASE_URL",
-    "sqlite:///data/plates.db",
+    f"sqlite:///{PROJECT_ROOT / 'data' / 'plates.db'}",
 )
 
 # Cache time-to-live (seconds) for the read-only data-access layer.
