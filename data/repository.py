@@ -19,7 +19,7 @@ from typing import Any
 import pandas as pd
 
 import config
-from data.db import run_query
+from data.db import run_query, ensure_list
 
 # ---------------------------------------------------------------------------
 # Cache shim: use st.cache_data when Streamlit is running, else a no-op.
@@ -101,6 +101,8 @@ def get_country_profile(iso3: str) -> dict[str, Any] | None:
     if df.empty:
         return None
     row = df.iloc[0].to_dict()
+    row["staple_foods"] = ensure_list(row.get("staple_foods"))
+    row["neighbors"] = ensure_list(row.get("neighbors"))
     row["dishes"] = get_dishes(iso3)["name"].tolist()
     row["festivals"] = _festival_names(iso3)
     return row
@@ -189,9 +191,9 @@ def get_similarity(iso3_a: str, iso3_b: str) -> dict[str, Any]:
         ua, ub = row["unique_b"], row["unique_a"]
     return {
         "score": float(row["score"]),
-        "common_foods": list(row["common_foods"] or []),
-        "unique_a": list(ua or []),
-        "unique_b": list(ub or []),
+        "common_foods": ensure_list(row["common_foods"]),
+        "unique_a": ensure_list(ua),
+        "unique_b": ensure_list(ub),
     }
 
 
@@ -499,7 +501,7 @@ def signature_dish_for(iso3: str, prefs: tuple[str, ...]) -> dict[str, Any] | No
         return None
     r = df.iloc[0]
     return {"dish": r["name"], "course": r["course"],
-            "taste_tags": list(r["taste_tags"] or [])}
+            "taste_tags": ensure_list(r["taste_tags"])}
 
 
 # ---------------------------------------------------------------------------
@@ -686,6 +688,8 @@ def get_insights() -> dict[str, Any]:
     if df.empty or int(df.iloc[0]["country_count"]) == 0:
         return {"country_count": 0}
     row = df.iloc[0].to_dict()
+    row["staple_foods"] = ensure_list(row.get("staple_foods"))
+    row["neighbors"] = ensure_list(row.get("neighbors"))
     row["country_count"] = int(row["country_count"])
 
     # Country with the most UNESCO heritage sites (metric computed where available).
@@ -756,9 +760,9 @@ def get_dinner_symbolism(dish_id: int) -> dict[str, Any]:
     r = df.iloc[0]
     return {
         "symbolism": r["symbolism"],
-        "connecting_ingredients": list(r["connecting_ingredients"] or []),
-        "trade_routes": list(r["trade_routes"] or []),
-        "cultural_values": list(r["cultural_values"] or []),
+        "connecting_ingredients": ensure_list(r["connecting_ingredients"]),
+        "trade_routes": ensure_list(r["trade_routes"]),
+        "cultural_values": ensure_list(r["cultural_values"]),
     }
 
 

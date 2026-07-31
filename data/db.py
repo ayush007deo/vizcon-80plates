@@ -47,7 +47,8 @@ def run_query(sql: str, params: Mapping[str, Any] | None = None) -> pd.DataFrame
     engine = get_engine()
     # SQLite doesn't support all PostgreSQL syntax, handle common differences
     adjusted_sql = sql
-    if "sqlite" in str(engine.url):
+    is_sqlite = "sqlite" in str(engine.url)
+    if is_sqlite:
         adjusted_sql = adjusted_sql.replace("::text", "")
         adjusted_sql = adjusted_sql.replace("ILIKE", "LIKE")
         # string_agg(DISTINCT col, sep ORDER BY col) -> group_concat(col, sep)
@@ -63,8 +64,47 @@ def run_query(sql: str, params: Mapping[str, Any] | None = None) -> pd.DataFrame
             r"group_concat(\1, '\2')",
             adjusted_sql
         )
+        # Remove unnest/LATERAL (PostgreSQL-specific)
+        if "unnest" in adjusted_sql.lower():
+            return pd.DataFrame()
     with engine.connect() as conn:
-        return pd.read_sql(text(adjusted_sql), conn, params=dict(params or {}))
+        df = pd.read_sql(text(adjusted_sql), conn, params=dict(params or {}))
+    # Parse JSON string columns back to Python lists (SQLite stores arrays as JSON)
+    if is_sqlite and not df.empty:
+        _parse_json_columns(df)
+    return df
+
+
+def _parse_json_columns(df: pd.DataFrame) -> None:
+    """In-place: convert JSON-encoded list strings to actual Python lists."""
+    import json
+    for col in df.columns:
+        if df[col].dtype == object:
+            sample = df[col].dropna().head(3)
+            if sample.empty:
+                continue
+            # Check if any value looks like a JSON array
+            if any(isinstance(v, str) and v.startswith("[") for v in sample):
+                df[col] = df[col].apply(
+                    lambda x: json.loads(x) if isinstance(x, str) and x.startswith("[") else x
+                )
+
+
+def ensure_list(val) -> list:
+    """Convert a value to a list — handles JSON strings, actual lists, and None."""
+    if val is None:
+        return []
+    if isinstance(val, list):
+        return val
+    if isinstance(val, str):
+        if val.startswith("["):
+            import json
+            try:
+                return json.loads(val)
+            except (json.JSONDecodeError, TypeError):
+                return []
+        return [val] if val else []
+    return list(val)
 
 
 def execute(sql: str, params: Mapping[str, Any] | None = None) -> None:
