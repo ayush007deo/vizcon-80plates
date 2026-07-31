@@ -48,9 +48,21 @@ def run_query(sql: str, params: Mapping[str, Any] | None = None) -> pd.DataFrame
     # SQLite doesn't support all PostgreSQL syntax, handle common differences
     adjusted_sql = sql
     if "sqlite" in str(engine.url):
-        # Replace PostgreSQL-specific syntax
         adjusted_sql = adjusted_sql.replace("::text", "")
         adjusted_sql = adjusted_sql.replace("ILIKE", "LIKE")
+        # string_agg(DISTINCT col, sep ORDER BY col) -> group_concat(col, sep)
+        import re
+        adjusted_sql = re.sub(
+            r"string_agg\(DISTINCT\s+(\w+),\s*'([^']*)'\s*ORDER BY \w+\)",
+            r"group_concat(\1, '\2')",
+            adjusted_sql
+        )
+        # string_agg(col, sep) -> group_concat(col, sep)
+        adjusted_sql = re.sub(
+            r"string_agg\((\w+),\s*'([^']*)'\)",
+            r"group_concat(\1, '\2')",
+            adjusted_sql
+        )
     with engine.connect() as conn:
         return pd.read_sql(text(adjusted_sql), conn, params=dict(params or {}))
 
