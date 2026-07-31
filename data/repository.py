@@ -223,16 +223,21 @@ def most_similar(iso3: str, n: int = 4) -> pd.DataFrame:
 @_cache
 def taste_profile(iso3: str) -> pd.DataFrame:
     """A country's flavor fingerprint from its dishes' taste tags (tag, count)."""
-    return run_query(
-        """
-        SELECT tag, COUNT(*) AS n
-        FROM dish d, unnest(d.taste_tags) AS tag
-        WHERE d.iso3 = :i
-        GROUP BY tag
-        ORDER BY n DESC, tag
-        """,
-        {"i": iso3},
-    )
+    from collections import Counter
+    dishes = get_dishes(iso3)
+    if dishes.empty:
+        return pd.DataFrame(columns=["tag", "n"])
+    tags = Counter()
+    for t_list in dishes["taste_tags"]:
+        if isinstance(t_list, list):
+            tags.update(t_list)
+        elif isinstance(t_list, str) and t_list.startswith("["):
+            import json
+            tags.update(json.loads(t_list))
+    if not tags:
+        return pd.DataFrame(columns=["tag", "n"])
+    df = pd.DataFrame(tags.items(), columns=["tag", "n"])
+    return df.sort_values(["n", "tag"], ascending=[False, True]).reset_index(drop=True)
 
 
 @_cache
@@ -454,60 +459,62 @@ def get_festivals_by_month(month: int) -> pd.DataFrame:
 # ---------------------------------------------------------------------------
 @_cache
 def recommend_countries(prefs: tuple[str, ...]) -> pd.DataFrame:
-    """Up to 10 countries ranked by number of selected preferences matched.
-
-    A country matches a preference if any of its dishes carries that taste tag.
-    """
-    prefs = tuple(p for p in prefs if p)
+    """Countries ranked by how many of the user's taste preferences their dishes match."""
     if not prefs:
-        return pd.DataFrame(columns=["iso3", "country", "region", "match_count", "matched_tags"])
-    return run_query(
-        """
-        SELECT c.iso3, c.name AS country, c.region,
-               COUNT(DISTINCT tag) AS match_count,
-               array_agg(DISTINCT tag ORDER BY tag) AS matched_tags
-        FROM country_profile c
-        JOIN dish d ON d.iso3 = c.iso3
-        JOIN LATERAL unnest(d.taste_tags) AS tag ON TRUE
-        WHERE tag = ANY(:prefs)
-        GROUP BY c.iso3, c.name, c.region
-        ORDER BY match_count DESC, c.name
-        LIMIT 10
-        """,
-        {"prefs": list(prefs)},
-    )
+        return pd.DataFrame()
+    all_dishes = run_query("SELECT iso3, taste_tags FROM dish")
+    if all_dishes.empty:
+        return pd.DataFrame()
+    import json
+    country_tags = {}
+    for _, row in all_dishes.iterrows():
+        iso3 = row["iso3"]
+        tags = row["taste_tags"]
+        if isinstance(tags, str) and tags.startswith("["):
+            tags = json.loads(tags)
+        if not isinstance(tags, list):
+            continue
+        country_tags.setdefault(iso3, set()).update(tags)
+    prefs_set = set(prefs)
+    results = []
+    for iso3, tags in country_tags.items():
+        matched = tags & prefs_set
+        if matched:
+            results.append({"iso3": iso3, "match_count": len(matched), "matched_tags": list(matched)})
+    if not results:
+        return pd.DataFrame()
+    df = pd.DataFrame(results).sort_values("match_count", ascending=False).reset_index(drop=True)
+    # Join country names
+    countries = run_query("SELECT iso3, name AS country FROM country_profile")
+    df = df.merge(countries, on="iso3", how="left")
+    return df
 
 
 @_cache
 def signature_dish_for(iso3: str, prefs: tuple[str, ...]) -> dict[str, Any] | None:
-    """A representative dish for a country given the user's tastes.
-
-    Prefers a main course whose taste tags overlap the preferences (the most
-    'on-point' dish to show as the poster); falls back to any dish for the country.
-    """
-    prefs = tuple(p for p in prefs if p)
-    df = run_query(
-        """
-        SELECT name, course, taste_tags,
-               (SELECT COUNT(*) FROM unnest(taste_tags) AS t WHERE t = ANY(:prefs)) AS overlap
-        FROM dish
-        WHERE iso3 = :iso3
-        ORDER BY overlap DESC, (course = 'main') DESC, name
-        LIMIT 1
-        """,
-        {"iso3": iso3, "prefs": list(prefs)},
-    )
-    if df.empty:
+    """Best-matching dish for a country given taste preferences."""
+    dishes = get_dishes(iso3)
+    if dishes.empty:
         return None
-    r = df.iloc[0]
-    return {"dish": r["name"], "course": r["course"],
-            "taste_tags": ensure_list(r["taste_tags"])}
+    import json
+    prefs_set = set(prefs) if prefs else set()
+    best = None
+    best_score = -1
+    for _, row in dishes.iterrows():
+        tags = row["taste_tags"]
+        if isinstance(tags, str) and tags.startswith("["):
+            tags = json.loads(tags)
+        if not isinstance(tags, list):
+            tags = []
+        score = len(set(tags) & prefs_set) if prefs_set else 0
+        # Prefer mains
+        course_bonus = 1 if row.get("course") == "main" else 0
+        total = score + course_bonus
+        if total > best_score:
+            best_score = total
+            best = {"dish": row["name"], "course": row.get("course"), "taste_tags": tags}
+    return best
 
-
-# ---------------------------------------------------------------------------
-# Global insights (Req 14)
-# ---------------------------------------------------------------------------
-@_cache
 def heritage_points() -> pd.DataFrame:
     """Countries with a UNESCO heritage count (for the heritage map/ranking)."""
     return run_query(

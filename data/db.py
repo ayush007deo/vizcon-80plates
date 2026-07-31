@@ -79,7 +79,8 @@ def _parse_json_columns(df: pd.DataFrame) -> None:
     """In-place: convert JSON-encoded list strings to actual Python lists."""
     import json
     for col in df.columns:
-        if df[col].dtype == object:
+        # Pandas 3.0+ uses StringDtype; older uses object
+        if df[col].dtype == object or df[col].dtype.name in ("str", "string", "object"):
             sample = df[col].dropna().head(3)
             if sample.empty:
                 continue
