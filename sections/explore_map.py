@@ -19,8 +19,13 @@ from components.navigation import go_to
 from data import repository as repo
 from viz.choropleth import FEATURED, build_explore_map
 
-_POPULAR = [("🥔", "Potato"), ("☕", "Coffee"), ("🌶️", "Chili Pepper"),
-            ("🍫", "Chocolate"), ("🍵", "Tea"), ("🍅", "Tomato")]
+_POPULAR = [
+    ("🥔", "Potato"), ("☕", "Coffee"), ("🌶️", "Chili Pepper"),
+    ("🍫", "Chocolate"), ("🍵", "Tea"), ("🍅", "Tomato"),
+    ("🍌", "Banana"), ("🌽", "Maize"), ("🍚", "Rice"),
+    ("🍬", "Sugar"), ("🌸", "Vanilla"), ("🫚", "Black Pepper"),
+    ("🪵", "Cinnamon"), ("🌰", "Nutmeg"), ("💚", "Cardamom"),
+]
 
 # Short teasers for each journey to give the user a reason to click.
 _JOURNEY_TEASER = {
@@ -30,6 +35,15 @@ _JOURNEY_TEASER = {
     "Chocolate": "Sacred Aztec drink turned global indulgence",
     "Tea": "A Chinese leaf that conquered continents",
     "Tomato": "Italy's favorite import from Peru",
+    "Banana": "From Southeast Asia to every tropical shore",
+    "Maize": "The Americas' golden grain that fed the world",
+    "Rice": "Asia's staple that crossed every ocean",
+    "Sugar": "The sweet crop that reshaped empires",
+    "Vanilla": "Mexico's fragrant orchid gone global",
+    "Black Pepper": "The king of spices that launched trade routes",
+    "Cinnamon": "Sri Lanka's bark that explorers risked everything for",
+    "Nutmeg": "The tiny seed that caused wars between nations",
+    "Cardamom": "India's queen of spices traveled west",
 }
 
 
