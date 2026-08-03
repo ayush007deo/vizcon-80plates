@@ -338,8 +338,7 @@ def render() -> None:
         st.markdown(f'<p style="color:#574B42;font-size:0.9rem;">{alt}</p>',
                     unsafe_allow_html=True)
 
-    # Popular journeys — visual cards with inline journey reveal
-    _render_popular_journeys(story_countries)
+    # Popular journeys moved to How Food Traveled section
 
 
     # Prominent search section

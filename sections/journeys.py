@@ -49,6 +49,10 @@ def render() -> None:
         unsafe_allow_html=True,
     )
 
+    # Popular journeys — quick-pick buttons
+    from sections.explore_map import _render_popular_journeys
+    _render_popular_journeys(None)
+
     tab_journey, tab_map = st.tabs(
         ["🧭 The Journey of Food", "🌍 The World's Spice Map"]
     )
