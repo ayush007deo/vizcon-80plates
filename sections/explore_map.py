@@ -197,14 +197,6 @@ def _inline_journey_preview(subject: str) -> None:
     st.markdown(f'<div class="pj-stops">{stops_html}</div>', unsafe_allow_html=True)
 
     # Anchor to full journeys section
-    st.markdown(
-        '<a href="#journeys" style="display:inline-block;margin-top:14px;padding:10px 22px;'
-        'background:linear-gradient(135deg,#C0392B,#D64B34);color:#fff;border-radius:999px;'
-        'font-weight:700;text-decoration:none;font-size:0.85rem;font-family:Inter,sans-serif;'
-        'box-shadow:0 6px 18px rgba(192,57,43,0.25);transition:all 0.18s ease;">'
-        '🧭 Explore all food journeys ↓</a>',
-        unsafe_allow_html=True,
-    )
 
 
 def _selected_iso3(event) -> str | None:
