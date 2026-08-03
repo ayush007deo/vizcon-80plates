@@ -141,7 +141,7 @@ def render() -> None:
     cards.section_band("Country Story", narrative("country_story"), emoji="📖")
 
     # The map is the navigation: switch countries without leaving the story.
-    _country_switcher(iso3)
+    # Country switcher removed - uses Explore map selection
 
     if not iso3:
         st.info("Choose a country on the Explore Map above to read its food story.")
