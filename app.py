@@ -20,8 +20,8 @@ from components.theme import inject_theme
 _FLOW_SECTIONS = [
     "home",
     "explore_map",
-    "journeys",
     "country_story",
+    "journeys",
     "traditions",
     "travel",
     "bigpicture",
