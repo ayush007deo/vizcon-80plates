@@ -100,17 +100,31 @@ def render() -> None:
         unsafe_allow_html=True,
     )
 
-    # Multi-select of taste preferences (Req 12.1).
-    st.markdown('<p style="color:#2A2320;font-weight:700;">I\'m in the mood for…</p>', unsafe_allow_html=True)
-    prefs = st.multiselect(
-        "Taste preferences",
-        options=config.TASTE_PREFERENCES,
-        default=list(st.session_state.get("taste_prefs", set())),
-        label_visibility="collapsed",
-    )
-    st.session_state["taste_prefs"] = set(prefs)
+    # Taste preference cards (multi-select via toggle buttons)
+    _TASTE_EMOJI = {"vegetarian": "🥬", "street food": "🍢", "seafood": "🐟",
+                    "spicy": "🌶️", "sweet": "🍬", "healthy": "🥗"}
+    
+    st.markdown('<p style="color:#2A2320;font-weight:700;">I\'m in the mood for… <span style="color:#574B42;font-weight:400;font-size:0.85rem;">(select one or more)</span></p>', unsafe_allow_html=True)
+    
+    current_prefs = set(st.session_state.get("taste_prefs", set()))
+    cols = st.columns(len(config.TASTE_PREFERENCES))
+    for col, taste in zip(cols, config.TASTE_PREFERENCES):
+        with col:
+            is_selected = taste in current_prefs
+            emoji = _TASTE_EMOJI.get(taste, "🍽️")
+            btn_type = "primary" if is_selected else "secondary"
+            label = f"{emoji} {taste}"
+            if st.button(label, key=f"taste_{taste}", type=btn_type, use_container_width=True):
+                if is_selected:
+                    current_prefs.discard(taste)
+                else:
+                    current_prefs.add(taste)
+                st.session_state["taste_prefs"] = current_prefs
+                st.rerun()
+    
+    prefs = list(current_prefs)
 
-    # No preferences submitted -> prompt, no list (Req 12.4).
+    # No preferences submitted -> prompt
     if not prefs:
         st.markdown('<p style="color:#574B42;font-style:italic;">Pick at least one taste you love and we\'ll map your ideal food trip.</p>', unsafe_allow_html=True)
         return
