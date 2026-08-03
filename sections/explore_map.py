@@ -127,12 +127,11 @@ def _render_popular_journeys(story_countries) -> None:
                 st.rerun()
     with cols[-1]:
         if st.button("🎲 Surprise", key="explore_surprise", width="stretch"):
-            pool = story_countries["iso3"].tolist()
-            if pool:
-                pick_iso = random.choice(pool)
-                st.session_state["explore_selected"] = pick_iso
-                st.session_state["selected_country"] = pick_iso
-                st.rerun()
+            # Pick a random food journey to show inline
+            journey_options = [s for _, s in _POPULAR]
+            pick = random.choice(journey_options)
+            st.session_state["journey_pick"] = pick
+            st.rerun()
 
     # Inline journey reveal
     if active_pick:
