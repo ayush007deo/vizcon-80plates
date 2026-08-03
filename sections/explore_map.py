@@ -107,45 +107,37 @@ def _render_popular_journeys(story_countries) -> None:
     st.markdown("#### 🔥 Popular journeys")
     st.markdown('<p style="color:#574B42;font-size:0.9rem;">Every ingredient on your plate once crossed oceans. Pick one to see its story unfold.</p>', unsafe_allow_html=True)
 
-    # Render visual food cards as HTML grid + Streamlit buttons for interactivity
     active_pick = st.session_state.get("journey_pick")
 
-    # The visual cards (HTML for looks, Streamlit buttons for actual interaction)
-    cards_html = ""
-    for emoji, subject in _POPULAR:
-        is_active = active_pick == subject
-        active_cls = " active" if is_active else ""
-        dot = '<div class="pj-dot"></div>' if is_active else ""
-        teaser = _JOURNEY_TEASER.get(subject, "")
-        cards_html += (
-            f'<div class="pj-card{active_cls}">{dot}'
-            f'<div class="pj-emoji">{emoji}</div>'
-            f'<div class="pj-name">{_html.escape(subject)}</div>'
-            f'<div class="pj-sub">{_html.escape(teaser)}</div></div>'
-        )
-    st.markdown(f'<div class="pj-grid">{cards_html}</div>', unsafe_allow_html=True)
-
-    # Actual clickable buttons (compact row beneath the visual cards)
-    cols = st.columns(len(_POPULAR) + 1)
-    for col, (emoji, subject) in zip(cols, _POPULAR):
-        with col:
-            is_active = active_pick == subject
-            label = f"✓ {subject}" if is_active else f"{emoji} {subject}"
-            if st.button(label, key=f"pop_{subject}", width="stretch",
-                         type="primary" if is_active else "secondary"):
-                if active_pick == subject:
-                    # Toggle off
-                    st.session_state.pop("journey_pick", None)
-                else:
-                    st.session_state["journey_pick"] = subject
-                st.rerun()
-    with cols[-1]:
-        if st.button("🎲 Surprise", key="explore_surprise", width="stretch"):
-            # Pick a random food journey to show inline
-            journey_options = [s for _, s in _POPULAR]
-            pick = random.choice(journey_options)
-            st.session_state["journey_pick"] = pick
+    # Single selectbox for choosing a journey (replaces both cards + buttons)
+    options = [f"{emoji}  {subject}" for emoji, subject in _POPULAR]
+    default_idx = 0
+    if active_pick:
+        for i, (_, subject) in enumerate(_POPULAR):
+            if subject == active_pick:
+                default_idx = i + 1
+                break
+    
+    choice = st.selectbox(
+        "Pick a food journey",
+        ["Select a food to follow its journey..."] + options,
+        index=default_idx,
+        label_visibility="collapsed",
+    )
+    
+    if choice and not choice.startswith("Select"):
+        # Extract subject from "emoji  subject"
+        subject = choice.split("  ", 1)[1] if "  " in choice else choice
+        if subject != active_pick:
+            st.session_state["journey_pick"] = subject
             st.rerun()
+    
+    # Surprise button
+    if st.button("🎲 Surprise me — pick a random journey", key="explore_surprise"):
+        journey_options = [s for _, s in _POPULAR]
+        pick = random.choice(journey_options)
+        st.session_state["journey_pick"] = pick
+        st.rerun()
 
     # Inline journey reveal
     if active_pick:
