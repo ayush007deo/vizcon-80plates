@@ -86,7 +86,7 @@ def _journey_body() -> None:
         citation.cite("migration")
         return
 
-    st.markdown('<p style="color:#574B42;font-style:italic;">Every ingredient on your plate once crossed oceans and centuries. Pick one and press play to follow it home.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#574B42;">Every ingredient on your plate once crossed oceans and centuries. Pick one and press play to follow it home. <strong style="color:#2A2320;">Follow a food across the world:</strong></p>', unsafe_allow_html=True)
 
     # Honor a pick coming from the Explore map's "Popular journeys" shortcuts.
     default_idx = 0
@@ -96,7 +96,6 @@ def _journey_body() -> None:
             if f" {pick}" in opt or opt.split("  ")[1:2] == [pick]:
                 default_idx = i
                 break
-    st.markdown('<p style="color:#2A2320;font-weight:700;">Follow a food across the world:</p>', unsafe_allow_html=True)
     choice = st.selectbox("Follow a food", options, index=default_idx, label_visibility="collapsed")
     subject = choice.split("  ")[1] if "  " in choice else choice
     is_spice = kind.get(choice) == "spice"
