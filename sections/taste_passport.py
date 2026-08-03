@@ -79,6 +79,7 @@ def _poster(rank: int, row, prefs: tuple[str, ...], total: int) -> None:
     )
     if st.button(f"Open {country}  →", key=f"tp_open_{iso3}", width="stretch"):
         st.session_state["selected_country"] = iso3
+        st.session_state["tp_opened"] = country
         st.rerun()
 
 
@@ -127,6 +128,12 @@ def render() -> None:
 
     # Heading (Req 12.6) and ranked poster wall (Req 12.2, 12.3).
     st.subheader("Your Culinary Passport")
+
+    # Show feedback when a country is opened
+    opened = st.session_state.pop("tp_opened", None)
+    if opened:
+        st.success(f"🌍 Exploring **{opened}**! Scroll up to the Country Story section to see its full profile.")
+
     st.caption(
         f"{len(recs)} destinations, ranked by how many of your {len(prefs)} tastes each "
         "matches. Click a poster to open its story."
@@ -134,11 +141,36 @@ def render() -> None:
 
     prefs_t = tuple(prefs)
     per_row = 4
+    max_rows = 2  # Show 2 rows initially
     rows = recs.reset_index(drop=True)
-    for start in range(0, len(rows), per_row):
-        chunk = rows.iloc[start:start + per_row]
+    
+    # Pagination
+    page = st.session_state.get("tp_page", 0)
+    start_idx = page * (per_row * max_rows)
+    end_idx = start_idx + (per_row * max_rows)
+    visible = rows.iloc[start_idx:end_idx]
+    
+    for start in range(0, len(visible), per_row):
+        chunk = visible.iloc[start:start + per_row]
         col_objs = st.columns(per_row)
         for j, (_, row) in enumerate(chunk.iterrows()):
             with col_objs[j]:
-                _poster(start + j + 1, row, prefs_t, len(prefs))
+                _poster(start_idx + start + j + 1, row, prefs_t, len(prefs))
+
+    # Show more / Show previous buttons
+    total_pages = (len(rows) + per_row * max_rows - 1) // (per_row * max_rows)
+    if total_pages > 1:
+        c1, c2, c3 = st.columns([1, 2, 1])
+        with c2:
+            col_prev, col_next = st.columns(2)
+            with col_prev:
+                if page > 0:
+                    if st.button("← Previous", key="tp_prev"):
+                        st.session_state["tp_page"] = page - 1
+                        st.rerun()
+            with col_next:
+                if end_idx < len(rows):
+                    if st.button(f"Show more →  ({len(rows) - end_idx} remaining)", key="tp_next"):
+                        st.session_state["tp_page"] = page + 1
+                        st.rerun()
 
