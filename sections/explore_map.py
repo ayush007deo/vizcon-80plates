@@ -325,6 +325,7 @@ def render() -> None:
     if iso3 and iso3 != selected:
         if bool(story_countries["iso3"].eq(iso3).any()):
             st.session_state["explore_selected"] = iso3
+            st.session_state["selected_country"] = iso3
             st.rerun()
         else:
             row = countries[countries["iso3"] == iso3]
