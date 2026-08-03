@@ -335,19 +335,3 @@ def render() -> None:
     # Popular journeys moved to How Food Traveled section
 
 
-    # Prominent search section
-    st.markdown(
-        """
-        <div style="background:#FFFFFF;border:2px solid #E8A317;border-radius:16px;
-            padding:20px 24px;margin:24px 0 16px 0;box-shadow:0 4px 16px rgba(232,163,23,0.12);">
-            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-                <span style="font-size:1.4rem;">🔎</span>
-                <span style="font-weight:700;font-size:1.05rem;color:#2A2320;">Search for a dish</span>
-                <span style="font-size:0.8rem;color:#9A8C7A;">Type any dish name to find where it belongs</span>
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-    from sections import dish_search
-    dish_search.body()
