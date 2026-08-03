@@ -24,7 +24,6 @@ def body() -> None:
     # No profiles at all -> message (Req 14.4).
     if not data or data.get("country_count", 0) == 0:
         st.info("No global findings are available yet.")
-        citation.cite("insights")
         return
 
     # Data-derived discovery insight, visually distinct (Req 17.2, 17.4).
@@ -65,4 +64,3 @@ def body() -> None:
         with cols[i % 3]:
             cards.value_card(title, value, icon=icon)
 
-    citation.cite("insights")

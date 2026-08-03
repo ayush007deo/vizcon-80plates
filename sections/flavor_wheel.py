@@ -22,7 +22,6 @@ def body() -> None:
 
     if clusters.empty:
         st.info("Not enough food-profile data yet to group countries by cuisine.")
-        citation.cite("flavor_wheel")
         return
 
     fig, alt = build_flavor_wheel(clusters)
@@ -35,4 +34,3 @@ def body() -> None:
         members = ", ".join(sorted(grp["country"]))
         st.markdown(f"**{cname}** — {members}")
 
-    citation.cite("flavor_wheel")

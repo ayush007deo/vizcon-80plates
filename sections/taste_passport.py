@@ -112,7 +112,6 @@ def render() -> None:
     # No preferences submitted -> prompt, no list (Req 12.4).
     if not prefs:
         st.markdown('<p style="color:#574B42;font-style:italic;">Pick at least one taste you love and we\'ll map your ideal food trip.</p>', unsafe_allow_html=True)
-        citation.cite("taste_passport")
         return
 
     try:
@@ -124,7 +123,6 @@ def render() -> None:
     # Nothing matches -> message (Req 12.5).
     if recs.empty:
         st.info("No countries matched those tastes. Try a different combination.")
-        citation.cite("taste_passport")
         return
 
     # Heading (Req 12.6) and ranked poster wall (Req 12.2, 12.3).
@@ -144,4 +142,3 @@ def render() -> None:
             with col_objs[j]:
                 _poster(start + j + 1, row, prefs_t, len(prefs))
 
-    citation.cite("taste_passport")

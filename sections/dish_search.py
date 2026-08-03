@@ -23,7 +23,6 @@ def body() -> None:
     # Empty/whitespace-only input -> prompt, no results (Req 13.3).
     if not query:
         st.markdown('<p style="color:#574B42;font-style:italic;">Enter a dish name to discover where it feels at home.</p>', unsafe_allow_html=True)
-        citation.cite("dish_search")
         return
 
     try:
@@ -35,7 +34,6 @@ def body() -> None:
     # No matches -> message (Req 13.4).
     if results.empty:
         st.info(f"No dishes matched “{query}”. Try another name.")
-        citation.cite("dish_search")
         return
 
     st.caption(f"{len(results)} match(es) for “{query}”.")
@@ -44,4 +42,3 @@ def body() -> None:
         countries = ", ".join(sorted(grp["country"]))
         cards.card(dish, f"Popular in: <b>{countries}</b>", icon="🍽️")
 
-    citation.cite("dish_search")

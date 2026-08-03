@@ -37,7 +37,6 @@ def body() -> None:
     # A month with no festivals -> message (Req 9.5).
     if festivals.empty:
         st.info(f"No festivals are recorded for {month_name}.")
-        citation.cite("festivals")
         return
 
     st.markdown(f"#### Celebrating in {month_name}")
@@ -63,4 +62,3 @@ def body() -> None:
         )
         cards.card(row["country"], body, icon="🎉")
 
-    citation.cite("festivals")

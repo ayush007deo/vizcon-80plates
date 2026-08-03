@@ -55,7 +55,6 @@ def body() -> None:
         return
     if not groups:
         st.info("No food-and-health data is available yet.")
-        citation.cite("health")
         return
 
     st.markdown(
@@ -72,7 +71,6 @@ def body() -> None:
     story = repo.diet_health_story(group, n=5)
     if not story:
         st.info(f"Not enough data to tell {group}'s story yet.")
-        citation.cite("health")
         return
 
     _hero(group, story)
@@ -87,7 +85,6 @@ def body() -> None:
         st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
         st.caption(alt + " Bubble size = population. Correlation is not causation.")
 
-    citation.cite("health")
 
 
 def _hero(group: str, s: dict) -> None:

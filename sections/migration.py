@@ -24,7 +24,6 @@ def body() -> None:
     # No stories at all -> message (Req 7.5).
     if not ingredients:
         st.info("No migration stories are available yet.")
-        citation.cite("migration")
         return
 
     ingredient = st.selectbox("Choose an ingredient to follow", ingredients, index=0)
@@ -35,7 +34,6 @@ def body() -> None:
     steps = repo.get_migration_story(ingredient)  # ordered by seq / time (Req 7.3)
     if steps.empty:
         st.info(f"No journey is recorded for {ingredient}.")
-        citation.cite("migration")
         return
 
     fig, alt = build_route_map(steps, subject=ingredient)
@@ -52,4 +50,3 @@ def body() -> None:
     )
     st.markdown(trail, unsafe_allow_html=True)
 
-    citation.cite("migration")

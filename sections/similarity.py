@@ -44,7 +44,6 @@ def body() -> None:
     # Before a second country is chosen: prompt, and show no score (Req 6.2).
     if choice == _PROMPT:
         st.info("Select a second country to see how alike their plates are.")
-        citation.cite("similarity")
         return
 
     iso_by_name = {n: i for i, n in zip(countries["iso3"], countries["name"])}
@@ -74,4 +73,3 @@ def body() -> None:
     with right:
         cards.list_card(f"Unique to {choice}", unique_b, icon="🍽️")
 
-    citation.cite("similarity")

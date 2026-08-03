@@ -56,4 +56,3 @@ def body() -> None:
         with (left if i % 2 == 0 else right):
             cards.card(f"{emoji} {title}", f"<div style='color:#574B42'>{text}</div>")
 
-    citation.cite("traditions")

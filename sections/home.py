@@ -206,4 +206,3 @@ def render() -> None:
     )
 
     st.markdown("<div style=\"height:24px\"></div>", unsafe_allow_html=True)
-    citation.cite("explore_map")

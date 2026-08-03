@@ -25,7 +25,6 @@ def body() -> None:
 
     if not spices:
         st.info("No spice journeys are available yet.")
-        citation.cite("spice_journey")
         return
 
     choice = st.selectbox("Pick a spice", [_PROMPT] + spices, index=0)
@@ -33,14 +32,12 @@ def body() -> None:
     # Before a spice is chosen: prompt to select one (Req 8.4).
     if choice == _PROMPT:
         st.info("Select a spice to watch it travel across the centuries.")
-        citation.cite("spice_journey")
         return
 
     steps = repo.get_spice_route(choice)
     # Selected spice has no recorded route -> unavailable message (Req 8.5).
     if steps.empty:
         st.info(f"The journey data for {choice} is unavailable.")
-        citation.cite("spice_journey")
         return
 
     cards.insight_callout(insight("spice_journey", spice=choice))  # Req 17.2/17.4
@@ -59,7 +56,6 @@ def body() -> None:
     )
     st.markdown(trail, unsafe_allow_html=True)
 
-    citation.cite("spice_journey")
 
 
 def world_map_body() -> None:
@@ -137,4 +133,3 @@ def world_map_body() -> None:
         st.plotly_chart(lfig, width="stretch", config={"displayModeBar": False})
         st.caption(lalt + " Life expectancy: OWID. Correlation is not causation.")
 
-    citation.cite("spice_journey")

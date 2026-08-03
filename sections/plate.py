@@ -37,7 +37,6 @@ def body() -> None:
     # No proportions available -> unavailable message (Req 5.4).
     if groups is None or groups.empty:
         st.info(f"The plate composition is unavailable for {name}.")
-        citation.cite("plate")
         return
 
     # Plate chart beside a photo of the country's signature dish.
@@ -53,4 +52,3 @@ def body() -> None:
         if img:
             st.image(img[0], width="stretch", caption=dishes[0])
 
-    citation.cite("plate")

@@ -27,7 +27,6 @@ def body() -> None:
 
     if points.empty and sites.empty:
         st.info("No UNESCO World Heritage data is available yet.")
-        citation.cite("heritage")
         return
 
     # Data-derived discovery insight (culture -> tourism).
@@ -67,4 +66,3 @@ def body() -> None:
         st.plotly_chart(sfig, width="stretch", config={"displayModeBar": False})
         st.caption(salt)
 
-    citation.cite("heritage")

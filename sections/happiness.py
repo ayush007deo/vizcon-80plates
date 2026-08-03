@@ -71,4 +71,3 @@ def body() -> None:
     st.plotly_chart(sfig, width="stretch", config={"displayModeBar": False})
     st.caption(salt)
 
-    citation.cite("happiness")

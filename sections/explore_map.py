@@ -341,7 +341,6 @@ def render() -> None:
     # Popular journeys — visual cards with inline journey reveal
     _render_popular_journeys(story_countries)
 
-    citation.cite("explore_map")
 
     # Prominent search section
     st.markdown(

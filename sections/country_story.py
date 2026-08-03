@@ -303,7 +303,6 @@ def render() -> None:
     # Who shares my plate? — the connection feature (Req theme: how the world connects).
     _who_shares_my_plate(iso3, name)
 
-    citation.cite("country_story")
 
     # Plate and comparison folded in as tabs so a country's story lives on one page.
     st.markdown("###")

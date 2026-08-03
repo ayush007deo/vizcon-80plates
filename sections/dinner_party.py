@@ -41,7 +41,6 @@ def render() -> None:
     # Fewer than five countries -> message, no table (Req 15.6).
     if dinner.get("error") == "fewer_than_five":
         st.info("There aren't enough countries with dishes to assemble a global dinner yet.")
-        citation.cite("dinner_party")
         return
 
     cards.insight_callout(insight("dinner_party", countries=dinner.get("countries", [])))
@@ -152,4 +151,3 @@ def render() -> None:
         unsafe_allow_html=True,
     )
 
-    citation.cite("dinner_party")

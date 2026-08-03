@@ -44,7 +44,6 @@ def _compact_body() -> None:
     yrs = td.years()
     if not yrs:
         st.warning("Tourism data could not be loaded right now.")
-        citation.cite("travel")
         return
 
     lottie.show("travel", height=100)
@@ -87,7 +86,6 @@ def _compact_body() -> None:
                 cards.big_stat(f"{flag(r['iso3'])} {r['name']}",
                                f"${_human(r['tourism_receipts'])}", icon="")
 
-    citation.cite("travel")
 
 
 def _country_fact_card(iso3: str) -> None:
@@ -126,7 +124,6 @@ def body() -> None:
     yrs = td.years()
     if not yrs:
         st.warning("Tourism data could not be loaded right now.")
-        citation.cite("travel")
         return
 
     lottie.show("travel", height=130)
@@ -287,4 +284,3 @@ def body() -> None:
                 cards.big_stat(f"{flag(r['iso3'])} {r['name']}",
                                f"${_human(r['tourism_receipts'])}", icon="🍽️")
 
-    citation.cite("travel")

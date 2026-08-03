@@ -83,10 +83,10 @@ def _journey_body() -> None:
 
     if not options:
         st.info("No food journeys are available yet.")
-        citation.cite("migration")
         return
 
     st.markdown('<p style="color:#574B42;">Every ingredient on your plate once crossed oceans and centuries. Pick one and press play to follow it home. <strong style="color:#2A2320;">Follow a food across the world:</strong></p>', unsafe_allow_html=True)
+    st.markdown("")
 
     # Honor a pick coming from the Explore map's "Popular journeys" shortcuts.
     default_idx = 0
@@ -107,7 +107,6 @@ def _journey_body() -> None:
 
     if steps is None or steps.empty:
         st.info(f"No journey is recorded for {subject}.")
-        citation.cite("migration")
         return
 
     # Drop (0,0) "Global" pseudo-stops from the map; note worldwide spread instead.
@@ -126,7 +125,6 @@ def _journey_body() -> None:
     st.markdown("#### The voyage, stop by stop")
     _voyage_cards(subject, real, went_global)
 
-    citation.cite("migration")
 
 
 def _journey_stats(subject: str, steps, went_global: bool) -> None:
