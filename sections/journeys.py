@@ -49,17 +49,14 @@ def render() -> None:
         unsafe_allow_html=True,
     )
 
-    # Popular journeys — quick-pick buttons
+    # Popular journeys — pick a food to see its animated route
     from sections.explore_map import _render_popular_journeys
     _render_popular_journeys(None)
 
-    tab_journey, tab_map = st.tabs(
-        ["🧭 The Journey of Food", "🌍 The World's Spice Map"]
-    )
-    with tab_journey:
-        _journey_body()
-    with tab_map:
-        spice_journey.world_map_body()
+    # The World's Spice Map (secondary content)
+    st.markdown("---")
+    st.markdown("#### 🌍 The World's Spice Map")
+    spice_journey.world_map_body()
 
 
 def _journey_body() -> None:
