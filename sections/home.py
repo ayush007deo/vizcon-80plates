@@ -45,6 +45,7 @@ def _open_random_country() -> None:
         pick = random.choice(options)
         st.session_state["selected_country"] = pick
         st.session_state["explore_selected"] = pick
+        st.session_state["surprise_picked"] = True
         st.rerun()
 
 
@@ -113,6 +114,17 @@ def render() -> None:
     with mid_b:
         if st.button("🎲  Surprise me", width="stretch"):
             _open_random_country()
+
+    # Show feedback when surprise country is picked
+    if st.session_state.pop("surprise_picked", False):
+        picked_iso = st.session_state.get("selected_country", "")
+        try:
+            profile = repo.get_country_profile(picked_iso)
+            name = profile.get("name", picked_iso) if profile else picked_iso
+        except Exception:
+            name = picked_iso
+        st.success(f"🎲 Taking you to **{name}**! Scroll down to the Country Story section to explore.")
+
     st.markdown(
         "<div style='text-align:center;color:#574B42;font-size:0.92rem;margin-top:2px'>"
         "No menus — the world map is your navigation. Click any country to open its story.</div>",
