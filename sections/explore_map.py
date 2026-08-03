@@ -109,31 +109,26 @@ def _render_popular_journeys(story_countries) -> None:
 
     active_pick = st.session_state.get("journey_pick")
 
-    # Single selectbox for choosing a journey (replaces both cards + buttons)
-    options = [f"{emoji}  {subject}" for emoji, subject in _POPULAR]
-    default_idx = 0
-    if active_pick:
-        for i, (_, subject) in enumerate(_POPULAR):
-            if subject == active_pick:
-                default_idx = i + 1
-                break
-    
-    choice = st.selectbox(
-        "Pick a food journey",
-        ["Select a food to follow its journey..."] + options,
-        index=default_idx,
-        label_visibility="collapsed",
-    )
-    
-    if choice and not choice.startswith("Select"):
-        # Extract subject from "emoji  subject"
-        subject = choice.split("  ", 1)[1] if "  " in choice else choice
-        if subject != active_pick:
-            st.session_state["journey_pick"] = subject
-            st.rerun()
-    
+    # Visual food cards as clickable buttons
+    per_row = 5
+    for start in range(0, len(_POPULAR), per_row):
+        chunk = _POPULAR[start:start + per_row]
+        cols = st.columns(len(chunk))
+        for col, (emoji, subject) in zip(cols, chunk):
+            with col:
+                is_active = active_pick == subject
+                teaser = _JOURNEY_TEASER.get(subject, "")
+                btn_type = "primary" if is_active else "secondary"
+                if st.button(f"{emoji} {subject}", key=f"pop_{subject}",
+                             type=btn_type, use_container_width=True):
+                    if active_pick == subject:
+                        st.session_state.pop("journey_pick", None)
+                    else:
+                        st.session_state["journey_pick"] = subject
+                    st.rerun()
+
     # Surprise button
-    if st.button("🎲 Surprise me — pick a random journey", key="explore_surprise"):
+    if st.button("🎲 Surprise me", key="explore_surprise"):
         journey_options = [s for _, s in _POPULAR]
         pick = random.choice(journey_options)
         st.session_state["journey_pick"] = pick
