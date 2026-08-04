@@ -10,21 +10,11 @@ from sections import happiness, health, insights
 def render() -> None:
     cards.page_header("bigpicture")
     tab_health, tab_happy, tab_insights = st.tabs(
-        ["❤️ Food, Culture & Longevity", "😊 The Happiest Tables", "📊 Global Insights"]
+        ["\u2764\ufe0f Food, Culture & Longevity", "\U0001f60a The Happiest Tables", "\U0001f4ca Global Insights"]
     )
     with tab_health:
-        try:
-            health.body()
-        except NameError as e:
-            st.error(f"Health NameError: {e}")
+        health.body()
     with tab_happy:
-        try:
-            happiness.body()
-        except NameError as e:
-            st.error(f"Happiness NameError: {e}")
+        happiness.body()
     with tab_insights:
-        try:
-            insights.body()
-        except NameError as e:
-            st.error(f"Insights NameError: {e}")
-# v2
+        insights.body()
