@@ -97,8 +97,6 @@ def render() -> None:
 
 
     # Per-dish symbolism (Req 15.3) — interactive cards in a grid.
-    st.markdown("#### What this table means")
-    st.caption("Each dish carries a story. Hover to reveal the cultural connection.")
 
     # Build the complete HTML with inline styles (avoids CSS scoping issues)
     cards_html = ""
