@@ -62,6 +62,19 @@ def _compact_body() -> None:
         with c3:
             cards.big_stat("One-year change", f"{impact['crash_pct']:.0f}%", icon="📉")
 
+    # Country comparison chart — top food-culture nations over time
+    st.markdown("#### 📈 How food nations fared")
+    st.markdown('<p style="color:#574B42;font-size:0.9rem;">Tourist arrivals for countries with UNESCO-recognized cuisines — the rise, the collapse, and the recovery.</p>', unsafe_allow_html=True)
+    food_countries = ["FRA", "ESP", "ITA", "TUR", "MEX", "THA"]
+    try:
+        series = td.country_series(tuple(food_countries))
+        if not series.empty:
+            sfig, salt = viz.build_country_comparison(series, "arrivals")
+            st.plotly_chart(sfig, width="stretch", config={"displayModeBar": False, "scrollZoom": False})
+            st.caption(salt)
+    except Exception:  # noqa: BLE001
+        pass
+
     st.divider()
 
     # Tie it directly to food: which food-culture countries attract the most travelers
