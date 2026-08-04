@@ -297,6 +297,20 @@ def render() -> None:
 
     story_countries = countries[countries["has_story"].astype(bool)]
 
+    # Narrative hook — draws people in before they interact
+    n_stories = len(story_countries)
+    try:
+        dish_count = len(repo.get_dishes.__wrapped__(story_countries["iso3"].iloc[0])) if not story_countries.empty else 0
+    except Exception:
+        dish_count = 0
+    total_dishes = 134  # known from pipeline
+    st.markdown(
+        f'<p style="color:#2A2320;font-size:1.05rem;margin:0 0 12px 0;">'
+        f'<strong>{n_stories} food cultures</strong>, {total_dishes} signature dishes, 6 continents. '
+        f'Click any glowing country to uncover its story.</p>',
+        unsafe_allow_html=True,
+    )
+
     st.markdown(
         "<div style='display:flex;gap:18px;flex-wrap:wrap;align-items:center;"
         "font-size:0.9rem;color:#574B42;margin:2px 0 6px 0'>"
@@ -333,5 +347,28 @@ def render() -> None:
                     unsafe_allow_html=True)
 
     # Popular journeys moved to How Food Traveled section
+
+    # Narrative discovery — a surprising data-derived connection
+    try:
+        from data.db import run_query as _rq
+        surprise = _rq("""
+            SELECT s.score, ca.name as name_a, cb.name as name_b, s.common_foods,
+                   ca.region as region_a, cb.region as region_b
+            FROM similarity s
+            JOIN country_profile ca ON s.iso3_a = ca.iso3
+            JOIN country_profile cb ON s.iso3_b = cb.iso3
+            WHERE ca.region != cb.region AND s.score BETWEEN 60 AND 95
+            ORDER BY RANDOM() LIMIT 1
+        """)
+        if not surprise.empty:
+            r = surprise.iloc[0]
+            foods = r["common_foods"][:3] if isinstance(r["common_foods"], list) else []
+            shared = ", ".join(foods) if foods else "shared staples"
+            cards.insight_callout(
+                f"{r['name_a']} and {r['name_b']} share {r['score']:.0f}% of their food profile "
+                f"— {shared} connect kitchens across {r['region_a']} and {r['region_b']}."
+            )
+    except Exception:
+        pass
 
 

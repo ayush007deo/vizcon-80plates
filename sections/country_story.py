@@ -303,6 +303,20 @@ def render() -> None:
     # Who shares my plate? — the connection feature (Req theme: how the world connects).
     _who_shares_my_plate(iso3, name)
 
+    # Narrative insight — comparative food story
+    try:
+        groups = repo.get_food_groups(iso3)
+        if not groups.empty:
+            top_group = groups.sort_values("pct", ascending=False).iloc[0]
+            avg_pct = 100.0 / len(groups) if len(groups) > 0 else 0
+            if float(top_group["pct"]) > avg_pct * 1.5:
+                cards.insight_callout(
+                    f"{name}'s plate tells a story: {top_group['food_group'].lower()} makes up "
+                    f"{float(top_group['pct']):.0f}% of the diet — that's what geography, climate, "
+                    f"and centuries of tradition put on the table."
+                )
+    except Exception:
+        pass
 
     # Plate and comparison folded in as tabs so a country's story lives on one page.
     st.markdown("###")
