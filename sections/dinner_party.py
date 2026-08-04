@@ -55,7 +55,7 @@ def render() -> None:
         st.markdown("""
         <style>
         [data-testid="stImage"] img {
-            height: 140px !important;
+            height: 200px !important;
             object-fit: cover !important;
             border-radius: 12px !important;
         }
