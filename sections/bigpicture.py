@@ -13,9 +13,18 @@ def render() -> None:
         ["❤️ Food, Culture & Longevity", "😊 The Happiest Tables", "📊 Global Insights"]
     )
     with tab_health:
-        health.body()
+        try:
+            health.body()
+        except NameError as e:
+            st.error(f"Health NameError: {e}")
     with tab_happy:
-        happiness.body()
+        try:
+            happiness.body()
+        except NameError as e:
+            st.error(f"Happiness NameError: {e}")
     with tab_insights:
-        insights.body()
+        try:
+            insights.body()
+        except NameError as e:
+            st.error(f"Insights NameError: {e}")
 # v2
