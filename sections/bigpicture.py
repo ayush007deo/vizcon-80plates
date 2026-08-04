@@ -1,10 +1,10 @@
-"""Food, Health & Flavor — the big picture: health, cuisine clusters, global insights."""
+"""Food, Health & Flavor — the big picture."""
 from __future__ import annotations
 
+import traceback
 import streamlit as st
 
 from components import cards
-from sections import happiness, health, insights
 
 
 def render() -> None:
@@ -13,8 +13,23 @@ def render() -> None:
         ["\u2764\ufe0f Food, Culture & Longevity", "\U0001f60a The Happiest Tables", "\U0001f4ca Global Insights"]
     )
     with tab_health:
-        health.body()
+        try:
+            from sections import health
+            health.body()
+        except Exception as e:
+            st.error(f"Health error: {type(e).__name__}: {e}")
+            st.code(traceback.format_exc())
     with tab_happy:
-        happiness.body()
+        try:
+            from sections import happiness
+            happiness.body()
+        except Exception as e:
+            st.error(f"Happiness error: {type(e).__name__}: {e}")
+            st.code(traceback.format_exc())
     with tab_insights:
-        insights.body()
+        try:
+            from sections import insights
+            insights.body()
+        except Exception as e:
+            st.error(f"Insights error: {type(e).__name__}: {e}")
+            st.code(traceback.format_exc())
