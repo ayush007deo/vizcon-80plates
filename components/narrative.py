@@ -28,7 +28,7 @@ NARRATIVES: dict[str, str] = {
     "taste_passport": "Tell us what you crave, and the world will suggest where to wander.",
     "dish_search": "Search for a dish and discover where it feels at home.",
     "insights": "Step back, and the world's plates reveal patterns no single meal could.",
-    "dinner_party": "Tonight, five strangers from five nations share one table.",
+    "dinner_party": "Tonight, four nations share one table — from starter to drink.",
     "food_travel": "We travel on our stomachs — the world's great cuisines are also its great destinations.",
     "sources": "Every story here rests on data you can trace and trust.",
 }
