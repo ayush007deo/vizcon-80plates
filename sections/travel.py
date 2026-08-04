@@ -62,24 +62,17 @@ def _compact_body() -> None:
         with c3:
             cards.big_stat("One-year change", f"{impact['crash_pct']:.0f}%", icon="📉")
 
-    # Global trend — compact
-    trend = td.global_trend()
-    if not trend.empty:
-        tfig, talt = viz.build_global_trend(trend, "arrivals")
-        st.plotly_chart(tfig, width="stretch", config={"displayModeBar": False})
-        st.caption(talt)
-
     st.divider()
 
-    # Tie it back to food: the cultural driver of travel
-    st.markdown("#### 🍽 And it comes back to the table")
+    # Tie it directly to food: which food-culture countries attract the most travelers
+    st.markdown("#### 🍽 Food is why people travel")
     cards.insight_callout(insight("food_travel"))
     try:
         dests = repo.top_food_destinations(limit=6)
     except Exception:  # noqa: BLE001
         dests = None
     if dests is not None and not dests.empty:
-        st.caption("Countries whose cuisines are UNESCO-recognized, ranked by tourism receipts.")
+        st.markdown('<p style="color:#574B42;font-size:0.9rem;">Countries whose cuisines are UNESCO-recognized consistently top the tourism charts. Food is not just a side dish to travel — it is the main course.</p>', unsafe_allow_html=True)
         cols = st.columns(min(len(dests), 6))
         for col, r in zip(cols, dests.to_dict("records")):
             with col:
