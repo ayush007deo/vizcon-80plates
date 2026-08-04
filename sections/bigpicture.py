@@ -18,3 +18,4 @@ def render() -> None:
         happiness.body()
     with tab_insights:
         insights.body()
+# v2
