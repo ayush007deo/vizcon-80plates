@@ -77,7 +77,7 @@ def body() -> None:
     _extremes(group, story)
     _cultural_spotlight()
     # Short disclaimer for counter-intuitive results (Sugar/Meat show positive correlation)
-    corr = s.get("corr")
+    corr = story.get("corr")
     if group in ("Sugar", "Meat") and corr is not None and corr > 0:
         st.markdown('<p style="color:#574B42;font-size:0.85rem;font-style:italic;">Note: countries with higher sugar/meat consumption also tend to have better healthcare, sanitation, and overall nutrition — these factors drive the longevity, not the sugar itself.</p>', unsafe_allow_html=True)
 
@@ -108,7 +108,7 @@ def _hero(group: str, s: dict) -> None:
     with c2:
         cards.big_stat(f"🥉 Least {group.lower()}", f"{s['low_life']:.0f} yr life exp", icon="")
     with c3:
-        corr = s.get("corr")
+        corr = story.get("corr")
         cards.big_stat("🔗 Correlation",
                        f"{corr:+.2f}" if corr is not None else "—", icon="")
         st.markdown("<div style='text-align:center;color:#574B42;font-size:0.8rem;"
@@ -157,7 +157,7 @@ def _cultural_spotlight() -> None:
 
 
 def _takeaway(group: str, s: dict) -> None:
-    corr = s.get("corr")
+    corr = story.get("corr")
     if group in {"Vegetables", "Fruits", "Seafood"}:
         msg = ("No single food is a magic bullet. The world's longest-lived cultures don't "
                "just eat more " + group.lower() + " — they combine plants, seafood, "
