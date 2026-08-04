@@ -64,7 +64,7 @@ def _compact_body() -> None:
 
     # Country comparison chart — top food-culture nations over time
     st.markdown("#### 📈 How food nations fared")
-    st.markdown('<p style="color:#574B42;font-size:0.9rem;">Tourist arrivals for countries with UNESCO-recognized cuisines — the rise, the collapse, and the recovery.</p>', unsafe_allow_html=True)
+    st.markdown('<p style="color:#574B42;font-size:0.9rem;">Tourist arrivals over time for countries with UNESCO-recognized cuisines.</p>', unsafe_allow_html=True)
     food_countries = ["FRA", "ESP", "ITA", "TUR", "MEX", "THA"]
     try:
         series = td.country_series(tuple(food_countries))
