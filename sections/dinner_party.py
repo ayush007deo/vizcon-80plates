@@ -52,6 +52,16 @@ def render() -> None:
     courses = dinner.get("courses", [])
 
     if courses:
+        # CSS to constrain all dinner images to same height
+        st.markdown("""
+        <style>
+        [data-testid="stImage"] img {
+            height: 140px !important;
+            object-fit: cover !important;
+            border-radius: 12px !important;
+        }
+        </style>
+        """, unsafe_allow_html=True)
         # Render course cards using st.columns + st.image for reliable image display
         cols = st.columns(len(courses))
         for i, c in enumerate(courses):
