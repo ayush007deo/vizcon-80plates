@@ -105,7 +105,7 @@ def _hero(group: str, s: dict) -> None:
     with c2:
         cards.big_stat(f"🥉 Least {group.lower()}", f"{s['low_life']:.0f} yr life exp", icon="")
     with c3:
-        corr = story.get("corr")
+        corr = s.get("corr")
         cards.big_stat("🔗 Correlation",
                        f"{corr:+.2f}" if corr is not None else "—", icon="")
         st.markdown("<div style='text-align:center;color:#574B42;font-size:0.8rem;"
