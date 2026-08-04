@@ -22,7 +22,6 @@ _FLOW_SECTIONS = [
     "explore_map",
     "country_story",
     "journeys",
-    "traditions",
     "travel",
     "bigpicture",
     "taste_passport",
@@ -270,7 +269,7 @@ def _render_chapter_nav() -> None:
     """A premium fixed top bar with brand + chapter links."""
     _CHAPTER_EMOJI = {
         "home": "🏠", "explore_map": "🗺️", "journeys": "🧭",
-        "country_story": "📖", "traditions": "🎎", "travel": "✈️",
+        "country_story": "📖", "travel": "✈️",
         "bigpicture": "📊", "taste_passport": "🛂", "dinner_party": "🍽️",
     }
     # Short labels for the nav bar (fit without overflow)
@@ -279,7 +278,6 @@ def _render_chapter_nav() -> None:
         "explore_map": "Explore",
         "journeys": "Journeys",
         "country_story": "Stories",
-        "traditions": "Traditions",
         "travel": "Travel",
         "bigpicture": "Health",
         "taste_passport": "Passport",
@@ -314,7 +312,7 @@ def _section_divider(section: str) -> None:
     """A visual divider between sections with a food-culture vector flourish."""
     _DIVIDER_EMOJI = {
         "explore_map": "🌍", "journeys": "🧭", "country_story": "📖",
-        "traditions": "🎎", "travel": "✈️", "bigpicture": "📊",
+        "travel": "✈️", "bigpicture": "📊",
         "taste_passport": "🛂", "dinner_party": "🍽️",
     }
     emoji = _DIVIDER_EMOJI.get(section, "✦")
