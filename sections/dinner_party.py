@@ -85,14 +85,6 @@ def render() -> None:
                         unsafe_allow_html=True,
                     )
                 
-                st.markdown(
-                    f'<div style="text-align:center;margin-top:8px;">'
-                    f'<div style="font-size:1.4rem;">{flag(c["iso3"])}</div>'
-                    f'<div style="font-weight:800;font-size:1rem;color:#2A2320;margin:2px 0;">{c["dish"]}</div>'
-                    f'<div style="font-size:0.85rem;color:#574B42;">{c["country"]}</div>'
-                    f'</div>',
-                    unsafe_allow_html=True,
-                )
 
 
     # Per-dish symbolism (Req 15.3) — interactive cards in a grid.
