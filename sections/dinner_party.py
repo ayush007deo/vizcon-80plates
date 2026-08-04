@@ -95,14 +95,6 @@ def render() -> None:
                     unsafe_allow_html=True,
                 )
 
-    # Festival slot.
-    fest = dinner.get("festival")
-    if fest:
-        fest_name = fest.get("festival") or cards.unavailable_html()
-        cards.card(
-            f"🎉 Festival — {flag(fest['iso3'])} {fest['country']}",
-            f"<div>{fest_name}</div>",
-        )
 
     # Per-dish symbolism (Req 15.3) — interactive cards in a grid.
     st.markdown("#### What this table means")
