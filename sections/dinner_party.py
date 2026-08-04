@@ -43,7 +43,6 @@ def render() -> None:
         st.info("There aren't enough countries with dishes to assemble a global dinner yet.")
         return
 
-    cards.insight_callout(insight("dinner_party", countries=dinner.get("countries", [])))
 
     # The five courses, each from a distinct country (Req 15.2).
     from components.flags import flag
