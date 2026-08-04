@@ -76,7 +76,7 @@ def body() -> None:
     _hero(group, story)
     _extremes(group, story)
     _cultural_spotlight()
-    _takeaway(group, story)
+    # takeaway removed
 
     # Details on demand — the full scatter, de-emphasized.
     with st.expander("📈 See the detailed chart (all countries)"):
