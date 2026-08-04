@@ -76,7 +76,10 @@ def body() -> None:
     _hero(group, story)
     _extremes(group, story)
     _cultural_spotlight()
-    # takeaway removed
+    # Short disclaimer for counter-intuitive results (Sugar/Meat show positive correlation)
+    corr = s.get("corr")
+    if group in ("Sugar", "Meat") and corr is not None and corr > 0:
+        st.markdown('<p style="color:#574B42;font-size:0.85rem;font-style:italic;">Note: countries with higher sugar/meat consumption also tend to have better healthcare, sanitation, and overall nutrition — these factors drive the longevity, not the sugar itself.</p>', unsafe_allow_html=True)
 
     # Details on demand — the full scatter, de-emphasized.
     with st.expander("📈 See the detailed chart (all countries)"):
