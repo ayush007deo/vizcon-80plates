@@ -66,7 +66,8 @@ def render() -> None:
             video_file = p
             break
 
-    if video_file is not None and static_video.exists():
+    if video_file is not None and static_video.exists() and False:
+        # Video disabled for Streamlit Cloud - use photo fallback
         mime = "video/mp4"
         st.markdown(f"<h1 class='atw-sronly'>{config.APP_TITLE}</h1>", unsafe_allow_html=True)
         # Use static file URL (served by Streamlit's static folder)
