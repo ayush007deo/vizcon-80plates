@@ -29,6 +29,7 @@ NARRATIVES: dict[str, str] = {
     "dish_search": "Search for a dish and discover where it feels at home.",
     "insights": "Step back, and the world's plates reveal patterns no single meal could.",
     "dinner_party": "Tonight, four nations share one table — from starter to drink.",
+    "sustainability": "Every meal has a footprint. The lightest plates on Earth are also where people live longest.",
     "food_travel": "We travel on our stomachs — the world's great cuisines are also its great destinations.",
     "sources": "Every story here rests on data you can trace and trust.",
 }

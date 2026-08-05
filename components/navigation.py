@@ -12,6 +12,7 @@ SECTION_LABELS: dict[str, str] = {
     "traditions": "Traditions & Heritage",
     "travel": "Travel & Tourism",
     "bigpicture": "Food, Health & Flavor",
+    "sustainability": "Food & Sustainability",
     "taste_passport": "Your Taste Passport",
     "dinner_party": "The Global Dinner Party",
     "sources": "Sources & Credits",

@@ -24,6 +24,7 @@ _FLOW_SECTIONS = [
     "journeys",
     "travel",
     "bigpicture",
+    "sustainability",
     "taste_passport",
     "dinner_party",
 ]
@@ -269,7 +270,7 @@ def _render_chapter_nav() -> None:
     """A premium fixed top bar with brand + chapter links."""
     _CHAPTER_EMOJI = {
         "home": "🏠", "explore_map": "🗺️", "journeys": "🧭",
-        "country_story": "📖", "travel": "✈️",
+        "country_story": "📖", "sustainability": "🌱", "travel": "✈️",
         "bigpicture": "📊", "taste_passport": "🛂", "dinner_party": "🍽️",
     }
     # Short labels for the nav bar (fit without overflow)
@@ -280,6 +281,7 @@ def _render_chapter_nav() -> None:
         "country_story": "Stories",
         "travel": "Travel",
         "bigpicture": "Health",
+        "sustainability": "Sustainability",
         "taste_passport": "Passport",
         "dinner_party": "Dinner Party",
     }
