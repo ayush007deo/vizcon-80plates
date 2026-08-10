@@ -126,6 +126,7 @@ def _audio_file(key: str) -> str:
 # ---------------------------------------------------------------------------
 def _goto(stage: str, **extra) -> None:
     st.session_state["journey_stage"] = stage
+    st.session_state["_scroll_top"] = True
     for k, v in extra.items():
         st.session_state[k] = v
     st.rerun()
@@ -1024,6 +1025,19 @@ def _header(stage: str) -> None:
 def render() -> None:
     _inject_css()
     stage = st.session_state.get("journey_stage", "prologue")
+
+    # Scroll to top when navigating between stages
+    if st.session_state.pop("_scroll_top", False):
+        import streamlit.components.v1 as components
+        components.html(
+            """<script>
+            window.parent.document.querySelector('[data-testid="stAppViewContainer"]')
+                ?.scrollTo({top: 0, behavior: 'instant'});
+            window.parent.scrollTo({top: 0, behavior: 'instant'});
+            </script>""",
+            height=0,
+        )
+
     _header(stage)
     if stage == "choose":
         _choose()
