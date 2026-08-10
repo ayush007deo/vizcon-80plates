@@ -1031,9 +1031,25 @@ def render() -> None:
         import streamlit.components.v1 as components
         components.html(
             """<script>
-            window.parent.document.querySelector('[data-testid="stAppViewContainer"]')
-                ?.scrollTo({top: 0, behavior: 'instant'});
-            window.parent.scrollTo({top: 0, behavior: 'instant'});
+            (function() {
+                var doc = window.parent.document;
+                // Try all known Streamlit scroll containers
+                var containers = [
+                    doc.querySelector('[data-testid="stAppViewContainer"]'),
+                    doc.querySelector('[data-testid="stVerticalBlock"]'),
+                    doc.querySelector('.main'),
+                    doc.querySelector('section.main'),
+                    doc.querySelector('[data-testid="stMainBlockContainer"]'),
+                    doc.documentElement,
+                    doc.body
+                ];
+                for (var i = 0; i < containers.length; i++) {
+                    if (containers[i]) {
+                        containers[i].scrollTop = 0;
+                    }
+                }
+                window.parent.scrollTo(0, 0);
+            })();
             </script>""",
             height=0,
         )
