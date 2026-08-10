@@ -33,6 +33,8 @@ _FLOW_SECTIONS = [
 def _init_state() -> None:
     defaults = {
         "active_section": "home",
+        "journey_stage": "prologue",
+        "open_chapters": {},
         "selected_country": None,
         "compare_country": None,
         "dinner_prev_set": [],
@@ -55,7 +57,18 @@ def _inject_single_page_css() -> None:
         header[data-testid="stHeader"] { display: none !important; }
 
         /* Give content full width */
-        .block-container { max-width: 1400px !important; padding-top: 64px !important; padding-bottom: 48px !important; }
+        .block-container { max-width: 100% !important; padding-top: 18px !important;
+            padding-bottom: 48px !important; padding-left: 56px !important;
+            padding-right: 56px !important; position: relative; z-index: 1; }
+
+        /* Fill the empty side gutters with a faint, tasteful culinary watermark so the
+           background reads as designed rather than blank. */
+        [data-testid="stAppViewContainer"]::before {
+            content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            opacity: 0.06;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='%238A3324' stroke-width='1.1'%3E%3Ccircle cx='22' cy='24' r='3'/%3E%3Ccircle cx='104' cy='70' r='2.4'/%3E%3Ccircle cx='60' cy='116' r='2.2'/%3E%3Cpath d='M64 30 q7 -9 14 0 q-7 3 -7 11 q0 -8 -7 -11z'/%3E%3Cpath d='M28 84 q9 -11 18 0'/%3E%3Cpath d='M96 108 l4 -7 4 7 M100 101 v12'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: 140px 140px;
+        }
 
         /* Reduce Streamlit's default element spacing */
         [data-testid="stVerticalBlock"] > [data-testid="stVerticalBlockBorderWrapper"] {
@@ -270,8 +283,9 @@ def _render_chapter_nav() -> None:
     """A premium fixed top bar with brand + chapter links."""
     _CHAPTER_EMOJI = {
         "home": "🏠", "explore_map": "🗺️", "journeys": "🧭",
-        "country_story": "📖", "sustainability": "🌱", "travel": "✈️",
-        "bigpicture": "📊", "taste_passport": "🛂", "dinner_party": "🍽️",
+        "country_story": "📖", "travel": "✈️",
+        "bigpicture": "📊", "sustainability": "🌱", "taste_passport": "🛂",
+        "dinner_party": "🍽️",
     }
     # Short labels for the nav bar (fit without overflow)
     _NAV_LABELS = {
@@ -281,7 +295,7 @@ def _render_chapter_nav() -> None:
         "country_story": "Stories",
         "travel": "Travel",
         "bigpicture": "Health",
-        "sustainability": "Sustainability",
+        "sustainability": "Planet",
         "taste_passport": "Passport",
         "dinner_party": "Dinner Party",
     }
@@ -314,7 +328,7 @@ def _section_divider(section: str) -> None:
     """A visual divider between sections with a food-culture vector flourish."""
     _DIVIDER_EMOJI = {
         "explore_map": "🌍", "journeys": "🧭", "country_story": "📖",
-        "travel": "✈️", "bigpicture": "📊",
+        "travel": "✈️", "bigpicture": "📊", "sustainability": "🌱",
         "taste_passport": "🛂", "dinner_party": "🍽️",
     }
     emoji = _DIVIDER_EMOJI.get(section, "✦")
@@ -370,31 +384,10 @@ def main() -> None:
     inject_theme()
     _inject_single_page_css()
 
-    # Sticky chapter navigation
-    _render_chapter_nav()
-
-    # Render all sections sequentially as one continuous story
-    for i, section in enumerate(_FLOW_SECTIONS):
-        if i == 0:
-            # Home section — no divider, starts immediately
-            st.markdown(f'<span class="atw-anchor" id="{section}"></span>'
-                        f'<div class="atw-story-section visible" data-section="{section}">',
-                        unsafe_allow_html=True)
-        else:
-            _section_divider(section)
-            st.markdown(f'<div class="atw-story-section" data-section="{section}">',
-                        unsafe_allow_html=True)
-
-        try:
-            _render_section_safe(section)
-        except Exception as exc:  # noqa: BLE001
-            st.error(
-                f"We couldn't load '{label_for(section)}' right now. "
-                "The data store may be unavailable."
-            )
-            st.caption(f"Details: {type(exc).__name__}")
-
-        st.markdown('</div>', unsafe_allow_html=True)
+    # Guided, country-first journey: an invitation, then a country's story unfolds
+    # chapter by chapter (each narratable), then a zoom-out to the global picture.
+    from sections import guided
+    guided.render()
 
     # Footer — includes condensed sources & AI credits
     st.markdown("---")
@@ -435,6 +428,9 @@ def main() -> None:
                     <a href="https://www.kaggle.com/datasets/unsdsn/world-happiness" target="_blank"
                         style="color:#574B42;text-decoration:none;border-bottom:1px dotted #9A8C7A;">
                         World Happiness Report</a><br>
+                    <a href="https://ourworldindata.org/environmental-impacts-of-food" target="_blank"
+                        style="color:#574B42;text-decoration:none;border-bottom:1px dotted #9A8C7A;">
+                        Our World in Data — Environmental Impacts of Food</a><br>
                     <span style="color:#9A8C7A;font-style:italic;">+ curated migration, spice &amp; festival data</span>
                 </div>
             </div>
@@ -472,68 +468,6 @@ def main() -> None:
         """,
         unsafe_allow_html=True,
     )
-
-    # Scroll-reveal observer + side progress dots
-    st.html(
-        """
-        <style>body{margin:0;padding:0;overflow:hidden;height:0;}</style>
-        <script>
-        (function() {
-            // Wait for Streamlit to finish rendering
-            setTimeout(function() {
-                const doc = window.parent.document;
-                const sections = doc.querySelectorAll('.atw-story-section');
-
-                // IntersectionObserver to reveal sections on scroll
-                const observer = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                        }
-                    });
-                }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
-
-                sections.forEach(function(s) { observer.observe(s); });
-
-                // Add progress dots on the right side
-                let progressDiv = doc.querySelector('.atw-progress');
-                if (!progressDiv) {
-                    progressDiv = doc.createElement('div');
-                    progressDiv.className = 'atw-progress';
-                    for (let i = 0; i < sections.length; i++) {
-                        const dot = doc.createElement('div');
-                        dot.className = 'atw-progress-dot';
-                        dot.title = sections[i].getAttribute('data-section') || '';
-                        dot.onclick = function() {
-                            const anchor = doc.getElementById(dot.title);
-                            if (anchor) anchor.scrollIntoView({behavior:'smooth'});
-                        };
-                        dot.style.cursor = 'pointer';
-                        progressDiv.appendChild(dot);
-                    }
-                    doc.body.appendChild(progressDiv);
-                }
-
-                // Update active dot on scroll
-                const progressObserver = new IntersectionObserver(function(entries) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            const idx = Array.from(sections).indexOf(entry.target);
-                            const dots = doc.querySelectorAll('.atw-progress-dot');
-                            dots.forEach(function(d, i) {
-                                d.classList.toggle('active', i === idx);
-                            });
-                        }
-                    });
-                }, { threshold: 0.3 });
-
-                sections.forEach(function(s) { progressObserver.observe(s); });
-            }, 1500);
-        })();
-        </script>
-        """,
-    )
-
 
 if __name__ == "__main__":
     main()
