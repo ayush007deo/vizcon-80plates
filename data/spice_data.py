@@ -16,7 +16,9 @@ import pandas as pd
 
 from pipeline.ingest import iso_reference
 
-_CSV = Path(__file__).resolve().parents[1] / "data" / "Global spice consumption.csv"
+_CSV = Path(__file__).resolve().parent / "Global spice consumption.csv"
+if not _CSV.exists():
+    _CSV = Path(__file__).resolve().parents[1] / "data" / "Global spice consumption.csv"
 
 try:  # pragma: no cover
     import streamlit as st
