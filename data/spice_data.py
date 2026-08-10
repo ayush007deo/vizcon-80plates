@@ -49,8 +49,14 @@ _ITEM_SHORT = {
 
 @lru_cache(maxsize=1)
 def _frame() -> pd.DataFrame:
+    import os
     if not _CSV.exists():
-        return pd.DataFrame(columns=["iso3", "name", "year", "item", "consumption", "production"])
+        # Try alternate paths
+        alt = Path(os.getcwd()) / "data" / "Global spice consumption.csv"
+        if alt.exists():
+            globals()["_CSV"] = alt
+        else:
+            return pd.DataFrame(columns=["iso3", "name", "year", "item", "consumption", "production"])
     df = pd.read_csv(_CSV, encoding="latin-1", low_memory=False)
     df.columns = [c.strip().lstrip("\ufeff") for c in df.columns]
     m49 = iso_reference.m49_to_iso3()
