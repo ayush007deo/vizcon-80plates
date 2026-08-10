@@ -15,6 +15,7 @@ NARRATIVES: dict[str, str] = {
     "traditions": "Every celebration sets a table, and every monument remembers a meal.",
     "travel": "The world's kitchens are also its destinations — follow where hunger and wanderlust meet.",
     "bigpicture": "Step back, and the world's plates reveal patterns no single meal could.",
+    "sustainability": "Every plate carries a second price tag — its cost to the planet.",
     "plate": "Look closely at a plate and you can read a whole nation's landscape.",
     "similarity": "Two distant kitchens often share more than they know.",
     "migration": "The ingredients we call our own were once travelers from far away.",
@@ -29,7 +30,6 @@ NARRATIVES: dict[str, str] = {
     "dish_search": "Search for a dish and discover where it feels at home.",
     "insights": "Step back, and the world's plates reveal patterns no single meal could.",
     "dinner_party": "Tonight, four nations share one table — from starter to drink.",
-    "sustainability": "Every meal has a footprint. The lightest plates on Earth are also where people live longest.",
     "food_travel": "We travel on our stomachs — the world's great cuisines are also its great destinations.",
     "sources": "Every story here rests on data you can trace and trust.",
 }

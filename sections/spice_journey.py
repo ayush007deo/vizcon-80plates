@@ -63,10 +63,19 @@ def world_map_body() -> None:
     from data import spice_data as sp
     from viz import spice as viz
 
-    year = sp.latest_year()
-    if year is None:
+    years = [int(y) for y in sp.global_trend()["year"].tolist()]
+    if not years:
         st.info("Spice-consumption data is not available yet.")
         return
+    latest = years[-1]
+    if len(years) > 1:
+        year = st.select_slider(
+            "Explore a year", options=years, value=latest,
+            help="Drag to watch how the world's spice appetite shifts over time.",
+            key="spice_year",
+        )
+    else:
+        year = latest
 
     cards.insight_callout(insight("spice_map"))
 

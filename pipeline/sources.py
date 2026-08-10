@@ -28,6 +28,8 @@ SOURCES: dict[str, tuple[str, int]] = {
     "FAOSTAT Global spice consumption": ("https://www.fao.org/faostat/en/#data", 15),
     "World Happiness Report": (
         "https://www.kaggle.com/datasets/unsdsn/world-happiness", 20),
+    "Our World in Data — Environmental Impacts of Food": (
+        "https://ourworldindata.org/environmental-impacts-of-food", 15),
 }
 
 # app section -> list of source names it draws from (Req 19.1)
@@ -52,6 +54,8 @@ SECTION_SOURCES: dict[str, list[str]] = {
     "migration": ["Curated dataset"],
     "spice_journey": ["Curated dataset", "FAOSTAT Global spice consumption"],
     "happiness": ["World Happiness Report", "Curated dataset"],
+    "sustainability": ["Our World in Data — Environmental Impacts of Food",
+                       "FAOSTAT Food Balance Sheets"],
     "dinner_party": ["Curated dataset"],
     "insights": ["FAOSTAT Food Balance Sheets", "Kaggle countries-life-expectancy",
                  "World Bank ST.INT.ARVL", "UNdata World Heritage"],

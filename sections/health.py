@@ -14,7 +14,7 @@ import streamlit as st
 from components import cards, citation
 from components.flags import flag
 from data import repository as repo
-from viz.bubble import build_health_bubble
+from viz.bubble import build_health_bubble, build_diet_longevity_dumbbell
 
 _GROUP_EMOJI = {
     "Vegetables": "🥬", "Fruits": "🍓", "Meat": "🥩", "Seafood": "🐟", "Sugar": "🍬",
@@ -76,14 +76,22 @@ def body() -> None:
     _hero(group, story)
     _extremes(group, story)
     _cultural_spotlight()
-    # Short disclaimer for counter-intuitive results (Sugar/Meat show positive correlation)
 
-    # Details on demand — the full scatter, de-emphasized.
-    with st.expander("📈 See the detailed chart (all countries)"):
-        points = repo.get_health_points(group)
-        fig, alt = build_health_bubble(points, group)
-        st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
-        st.caption(alt + " Bubble size = population. Correlation is not causation.")
+    # The meaningful view: within each region, do the higher-consumers live longer?
+    # Splitting inside a region controls for wealth, isolating the diet signal.
+    points = repo.get_health_points(group)
+    fig, alt = build_diet_longevity_dumbbell(points, group)
+    st.markdown(f"#### Within each region, do the {group.lower()}-eaters live longer?")
+    st.caption("Each region split into its lower- and higher-consumers of this food, so "
+               "we compare like with like rather than rich vs poor nations.")
+    st.plotly_chart(fig, width="stretch", config={"displayModeBar": False})
+    st.caption(alt)
+
+    # The raw scatter stays available for the curious.
+    with st.expander("📈 See every country (scatter)"):
+        fig2, alt2 = build_health_bubble(points, group)
+        st.plotly_chart(fig2, width="stretch", config={"displayModeBar": False})
+        st.caption(alt2 + " Bubble size = population. Correlation is not causation.")
 
 
 

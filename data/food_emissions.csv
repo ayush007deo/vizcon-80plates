@@ -1,28 +1,25 @@
-food,ghg_kg,land_use_m2,water_l,category
-Beef (beef herd),99.48,326.21,1451,Meat
-Lamb & Mutton,39.72,369.81,1803,Meat
-Cheese,23.88,87.79,5605,Dairy
-Beef (dairy herd),33.3,130.16,1451,Meat
-Chocolate,46.65,68.96,1512,Other
-Coffee,28.53,21.62,1308,Other
-Prawns (farmed),26.87,2.97,3515,Seafood
-Pig Meat,12.31,17.36,1796,Meat
-Poultry Meat,9.87,12.22,660,Meat
-Olive Oil,6.26,26.31,2142,Plant
-Fish (farmed),13.63,8.41,3691,Seafood
-Eggs,4.67,6.27,578,Dairy
-Rice,4.45,2.8,2248,Grain
-Milk,3.15,8.95,628,Dairy
-Tofu,3.16,3.52,149,Plant
-Wheat & Rye,1.57,3.85,648,Grain
-Tomatoes,2.09,0.8,370,Plant
-Maize,1.7,2.94,216,Grain
-Cassava,1.32,1.81,0,Grain
-Potatoes,0.46,0.88,59,Plant
-Bananas,0.86,1.93,115,Plant
-Nuts,0.43,12.96,4134,Plant
-Peas,0.98,7.46,397,Plant
-Lentils,0.9,7.27,397,Plant
-Root Vegetables,0.43,0.33,28,Plant
-Apples,0.43,0.63,180,Plant
-Citrus Fruit,0.39,0.71,83,Plant
+food,ghg_kg,category
+Beef (beef herd),99.48,Meat
+Dark Chocolate,46.65,Other
+Lamb & Mutton,39.72,Meat
+Beef (dairy herd),33.30,Meat
+Coffee,28.53,Other
+Prawns (farmed),26.87,Seafood
+Cheese,23.88,Dairy
+Fish (farmed),13.63,Seafood
+Pig Meat,12.31,Meat
+Poultry Meat,9.87,Meat
+Eggs,4.67,Other
+Rice,4.45,Grain
+Cane Sugar,3.20,Other
+Milk,3.15,Dairy
+Tofu,3.16,Plant
+Tomatoes,2.09,Plant
+Maize (Corn),1.70,Grain
+Wheat & Rye,1.57,Grain
+Lentils,1.00,Plant
+Peas,0.98,Plant
+Bananas,0.86,Plant
+Potatoes,0.46,Plant
+Apples,0.43,Plant
+Nuts,0.43,Plant

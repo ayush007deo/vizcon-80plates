@@ -4,9 +4,19 @@ from __future__ import annotations
 import streamlit as st
 
 from components import cards, citation
+from components.voice import narrate
 from data import repository as repo
 from sections import spice_journey
 from viz.routes import build_route_map
+
+# Narrated intro for the food-travel story (pre-generated with Amazon Polly).
+JOURNEYS_INTRO = (
+    "The foods we call our own were once strangers. The tomato that defines Italian "
+    "cooking sailed from the Andes. The chili at the heart of Thai curries crossed the "
+    "Pacific only four centuries ago. Even India's beloved spices once traveled from "
+    "distant islands. Every ingredient on your plate carries a passport — choose one, "
+    "and watch it find its way home across oceans and centuries."
+)
 
 # A food icon for each traveler (falls back to a generic plate).
 _ICON = {
@@ -48,6 +58,10 @@ def render() -> None:
         """,
         unsafe_allow_html=True,
     )
+
+    # A narrated invitation into the food-travel story (Polly audio; browser fallback).
+    narrate(JOURNEYS_INTRO, label="Hear how food traveled",
+            audio_file="assets/audio/journeys_intro.mp3", height=70)
 
     # Popular journeys — pick a food to see its animated route
     from sections.explore_map import _render_popular_journeys

@@ -68,17 +68,41 @@ def build_top_consumers(df: pd.DataFrame, year: int) -> tuple[go.Figure, str]:
     return fig, alt
 
 
+_PIE_COLORS = ["#C0392B", "#E8892B", "#F6C453", "#1F6F5C", "#4A72B0",
+               "#8E6BB0", "#E9A03B", "#2A9D8F", "#7A1F3D"]
+
+
 def build_breakdown(df: pd.DataFrame, year: int) -> tuple[go.Figure, str]:
-    """Treemap of global consumption by spice type — what the world eats most."""
-    fig = px.treemap(df, path=["item"], values="consumption",
-                     color="consumption", color_continuous_scale=_SCALE)
-    fig.update_traces(hovertemplate="<b>%{label}</b><br>%{value:,.0f} tonnes<extra></extra>",
-                      textinfo="label+percent root")
-    fig.update_layout(template=theme.plotly_template(), height=360,
-                      margin=dict(l=0, r=0, t=0, b=0), coloraxis_showscale=False)
-    top = df.iloc[0]
-    alt = (f"A treemap of world spice consumption by type in {year}; "
-           f"{top['item']} is the largest share.")
+    """Donut pie of global consumption by spice type — what the world seasons with."""
+    d = df.sort_values("consumption", ascending=False).reset_index(drop=True)
+    # Drop the uncategorized "Other spices" bucket (it dwarfs everything) so the pie
+    # reveals the split among the *named* spices the world actually seasons with.
+    named = d[d["item"] != "Other spices"].reset_index(drop=True)
+    if len(named) >= 2:
+        d = named
+    colors = [_PIE_COLORS[i % len(_PIE_COLORS)] for i in range(len(d))]
+    pull = [0.07 if i == 0 else 0.0 for i in range(len(d))]  # lift the leading spice
+    total = float(d["consumption"].sum())
+
+    fig = go.Figure(go.Pie(
+        labels=d["item"], values=d["consumption"], hole=0.52, sort=False,
+        direction="clockwise", pull=pull,
+        marker=dict(colors=colors, line=dict(color="#FFF8F1", width=2)),
+        textinfo="percent", textfont=dict(size=12, color="#2A2320"),
+        hovertemplate="<b>%{label}</b><br>%{value:,.0f} tonnes<br>%{percent}<extra></extra>",
+    ))
+    fig.update_layout(
+        template=theme.plotly_template(), height=380,
+        margin=dict(l=0, r=0, t=10, b=0),
+        legend=dict(orientation="v", x=1.0, y=0.5, font=dict(size=11)),
+        annotations=[dict(text=f"<b>{year}</b><br>{_fmt(total)}", x=0.5, y=0.5,
+                          showarrow=False, font=dict(size=14, color="#574B42"))],
+    )
+    top = d.iloc[0]
+    share = top["consumption"] / total * 100 if total else 0
+    alt = (f"A donut chart of the world's named spices in {year} (excluding the "
+           f"uncategorized 'other' bucket); {top['item']} leads at {share:.0f}%. "
+           "Click a legend item to isolate a spice.")
     return fig, alt
 
 

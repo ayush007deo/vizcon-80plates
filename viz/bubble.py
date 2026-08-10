@@ -60,3 +60,97 @@ def build_health_bubble(points: pd.DataFrame,
            "the plate against life expectancy; bubble size shows population, color shows "
            "region, and a dotted trend line shows the overall relationship." + corr_txt)
     return fig, alt
+
+
+def build_diet_longevity_dumbbell(points: pd.DataFrame,
+                                  group_label: str = "Vegetables") -> tuple["object", str]:
+    """Within each region, compare life expectancy of the higher- vs lower-consumers
+    of a food group. A dumbbell (two connected dots per region) isolates the diet
+    signal from regional wealth differences far better than a raw scatter.
+    """
+    df = points.dropna(subset=["supply", "life_expectancy", "region"]).copy()
+
+    rows = []
+    for region, g in df.groupby("region"):
+        if len(g) < 4:  # too few countries to split meaningfully
+            continue
+        g_sorted = g.sort_values("supply")
+        half = len(g_sorted) // 2
+        low = g_sorted.head(half)
+        high = g_sorted.tail(len(g_sorted) - half)
+        rows.append({
+            "region": region,
+            "low_life": float(low["life_expectancy"].mean()),
+            "high_life": float(high["life_expectancy"].mean()),
+            "n": int(len(g)),
+        })
+    dfr = pd.DataFrame(rows)
+    if dfr.empty:
+        fig = go.Figure()
+        fig.update_layout(template=theme.plotly_template(), height=200,
+                          annotations=[dict(text="Not enough data to compare regions.",
+                                            showarrow=False, x=0.5, y=0.5,
+                                            xref="paper", yref="paper")])
+        return fig, "Not enough data to compare regions."
+
+    dfr["gap"] = dfr["high_life"] - dfr["low_life"]
+    dfr = dfr.sort_values("high_life").reset_index(drop=True)
+
+    low_color = "#C9A15B"     # muted amber — eats least
+    high_color = theme.ACCENT  # deep teal — eats most
+
+    # Connectors (one grey line per region, drawn as a single trace with gaps).
+    cx, cy = [], []
+    for _, r in dfr.iterrows():
+        cx += [r["low_life"], r["high_life"], None]
+        cy += [r["region"], r["region"], None]
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=cx, y=cy, mode="lines", line=dict(color="#D8C9B4", width=4),
+        hoverinfo="skip", showlegend=False,
+    ))
+    fig.add_trace(go.Scatter(
+        x=dfr["low_life"], y=dfr["region"], mode="markers",
+        name=f"Eats least {group_label.lower()}",
+        marker=dict(size=18, color=low_color, line=dict(width=2, color="#FFFFFF")),
+        customdata=dfr["n"],
+        hovertemplate=("<b>%{y}</b><br>Lower-" + group_label.lower() +
+                       " countries: %{x:.1f} yrs<br>%{customdata} countries<extra></extra>"),
+    ))
+    fig.add_trace(go.Scatter(
+        x=dfr["high_life"], y=dfr["region"], mode="markers",
+        name=f"Eats most {group_label.lower()}",
+        marker=dict(size=18, color=high_color, line=dict(width=2, color="#FFFFFF")),
+        customdata=dfr["n"],
+        hovertemplate=("<b>%{y}</b><br>Higher-" + group_label.lower() +
+                       " countries: %{x:.1f} yrs<br>%{customdata} countries<extra></extra>"),
+    ))
+
+    # Gap labels beside the rightmost dot of each region.
+    for _, r in dfr.iterrows():
+        gap = r["gap"]
+        x = max(r["low_life"], r["high_life"])
+        fig.add_annotation(
+            x=x, y=r["region"], text=f"{gap:+.1f} yr", showarrow=False,
+            xshift=42, font=dict(size=11, color=(high_color if gap >= 0 else theme.PRIMARY),
+                                 family=theme.FONT_STACK_UI),
+        )
+
+    xmin = float(min(dfr["low_life"].min(), dfr["high_life"].min()))
+    xmax = float(max(dfr["low_life"].max(), dfr["high_life"].max()))
+    fig.update_layout(
+        template=theme.plotly_template(), height=90 + 70 * len(dfr),
+        margin=dict(l=10, r=70, t=10, b=30),
+        xaxis=dict(title="Average life expectancy (years)", gridcolor="#EFE6D6",
+                   range=[xmin - 3, xmax + 4]),
+        yaxis=dict(title="", gridcolor="rgba(0,0,0,0)"),
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, x=0),
+        plot_bgcolor="rgba(255,248,241,0.5)", paper_bgcolor="rgba(0,0,0,0)",
+    )
+
+    higher = int((dfr["gap"] > 0).sum())
+    alt = (f"A dumbbell chart comparing, within each of {len(dfr)} world regions, the average "
+           f"life expectancy of countries that eat more {group_label.lower()} versus those "
+           f"that eat less. In {higher} of {len(dfr)} regions the higher-{group_label.lower()} "
+           "group lives longer; each row's label shows the gap in years.")
+    return fig, alt
