@@ -222,7 +222,7 @@ def render() -> None:
                 background:#FFFFFF;border:1px solid #EFE6D8;border-radius:18px;overflow:hidden;
                 box-shadow:0 8px 24px rgba(43,33,24,0.10);">
                 <div style="flex:0 0 200px;
-                    background:url(\'{img_src}\') center/cover no-repeat;"></div>
+                    background:url(\'{img_src}\') top center/cover no-repeat;"></div>
                 <div style="flex:1;padding:18px 22px;display:flex;flex-direction:column;
                     justify-content:center;overflow:hidden;">
                     <div style="display:flex;align-items:center;gap:10px;">
