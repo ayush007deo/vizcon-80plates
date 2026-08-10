@@ -415,7 +415,7 @@ def main() -> None:
         st.markdown(
             """
             <div style="background:#FFFFFF;border:1px solid #EFE6D8;border-radius:14px;
-                padding:18px 20px;box-shadow:0 3px 12px rgba(43,33,24,0.06);height:100%;min-height:220px;">
+                padding:18px 20px;box-shadow:0 3px 12px rgba(43,33,24,0.06);">
                 <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:0.72rem;
                     text-transform:uppercase;letter-spacing:0.08em;color:#C0392B;
                     margin-bottom:10px;">📚 Data Sources</div>
@@ -445,7 +445,7 @@ def main() -> None:
         st.markdown(
             """
             <div style="background:#FFFFFF;border:1px solid #EFE6D8;border-radius:14px;
-                padding:18px 20px;box-shadow:0 3px 12px rgba(43,33,24,0.06);height:100%;min-height:220px;">
+                padding:18px 20px;box-shadow:0 3px 12px rgba(43,33,24,0.06);">
                 <div style="font-family:'Inter',sans-serif;font-weight:700;font-size:0.72rem;
                     text-transform:uppercase;letter-spacing:0.08em;color:#1F6F5C;
                     margin-bottom:10px;">🤖 Built with AI</div>
