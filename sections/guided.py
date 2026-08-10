@@ -511,7 +511,23 @@ def _country_hub() -> None:
 
     # Render opened chapters in the order they were opened.
     for cid in opened:
+        st.markdown(f'<span id="gj-ch-{cid}" style="display:block;position:relative;top:-80px;visibility:hidden;height:0;"></span>',
+                    unsafe_allow_html=True)
         _render_chapter(cid, iso3, name, profile)
+
+    # Auto-scroll to the most recently opened chapter so the user sees it immediately.
+    if opened:
+        last_cid = opened[-1]
+        st.html(
+            f"""<script>
+            (function() {{
+                setTimeout(function() {{
+                    var el = window.parent.document.getElementById('gj-ch-{last_cid}');
+                    if (el) {{ el.scrollIntoView({{behavior:'smooth', block:'start'}}); }}
+                }}, 300);
+            }})();
+            </script>"""
+        )
 
     # A prominent, always-visible invitation to zoom out — the natural next step, so
     # the Big Picture is easy to find without hunting for a small top-corner button.
