@@ -6,6 +6,9 @@ control navigates to the Plate_View for the selected country.
 """
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
 import streamlit as st
 
 from components import cards, citation
@@ -165,7 +168,7 @@ def render() -> None:
     name = profile.get("name", iso3)
     dishes = profile.get("dishes") or []
 
-    # Hero: signature-dish photo beside the title in a styled card.
+    # Hero: country landmark image if available, else signature-dish photo.
     signature = dishes[0] if dishes else name
     try:
         dish_rows = repo.get_dishes(iso3)
@@ -174,13 +177,43 @@ def render() -> None:
             signature = mains[0]
     except Exception:  # noqa: BLE001
         pass
-    img = get_food_image(signature, f"{name} cuisine", name)
+
+    # Try country landmark image first (assets/country/<ISO3>.jpg)
+    _COUNTRY_DIR = Path(__file__).resolve().parents[1] / "assets" / "country"
+    # Fallback path for Streamlit Cloud
+    if not _COUNTRY_DIR.exists():
+        _alt_country = Path(os.getcwd()) / "assets" / "country"
+        if _alt_country.exists():
+            _COUNTRY_DIR = _alt_country
+    _country_img = None
+    for ext in (".jpg", ".jpeg", ".png", ".webp"):
+        _cp = _COUNTRY_DIR / f"{iso3}{ext}"
+        if _cp.exists() and _cp.stat().st_size > 0:
+            _country_img = str(_cp)
+            break
+    if _country_img:
+        img = (_country_img, "Landmark photo · Wikimedia Commons")
+    else:
+        img = get_food_image(signature, f"{name} cuisine", name)
 
     region = profile.get("region") or ""
     tagline = _tagline(iso3, profile)
 
     # Clean hero card: photo left, info right, compact and well-proportioned
     img_src = img[0] if img else None
+
+    # Convert local file paths to base64 data URIs (CSS url() can't access local filesystem)
+    if img_src and not img_src.startswith(("http://", "https://", "data:")):
+        import base64
+        _img_path = Path(img_src)
+        if _img_path.exists():
+            _suffix = _img_path.suffix.lower()
+            _mime = "image/jpeg" if _suffix in (".jpg", ".jpeg") else f"image/{_suffix.lstrip('.')}"
+            _b64 = base64.b64encode(_img_path.read_bytes()).decode("ascii")
+            img_src = f"data:{_mime};base64,{_b64}"
+        else:
+            img_src = None
+
     if img_src:
         st.markdown(
             f'''
