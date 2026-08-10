@@ -511,22 +511,32 @@ def _country_hub() -> None:
 
     # Render opened chapters in the order they were opened.
     for cid in opened:
-        st.markdown(f'<span id="gj-ch-{cid}" style="display:block;position:relative;top:-80px;visibility:hidden;height:0;"></span>',
-                    unsafe_allow_html=True)
         _render_chapter(cid, iso3, name, profile)
 
-    # Auto-scroll to the most recently opened chapter so the user sees it immediately.
+    # Auto-scroll to the most recently revealed chapter.
     if opened:
-        last_cid = opened[-1]
-        st.html(
-            f"""<script>
-            (function() {{
-                setTimeout(function() {{
-                    var el = window.parent.document.getElementById('gj-ch-{last_cid}');
-                    if (el) {{ el.scrollIntoView({{behavior:'smooth', block:'start'}}); }}
-                }}, 300);
-            }})();
-            </script>"""
+        import streamlit.components.v1 as components
+        components.html(
+            """
+            <script>
+            function scrollToLastChapter() {
+                var doc = window.parent.document;
+                var heads = doc.querySelectorAll('.gj-chapter-head');
+                if (heads.length > 0) {
+                    var last = heads[heads.length - 1];
+                    var rect = last.getBoundingClientRect();
+                    // Only scroll if the element is not already visible
+                    if (rect.top > window.parent.innerHeight || rect.top < 0) {
+                        last.scrollIntoView({behavior: 'smooth', block: 'start'});
+                    }
+                }
+            }
+            // Retry with increasing delays to handle render timing
+            setTimeout(scrollToLastChapter, 500);
+            setTimeout(scrollToLastChapter, 1200);
+            </script>
+            """,
+            height=0,
         )
 
     # A prominent, always-visible invitation to zoom out — the natural next step, so
