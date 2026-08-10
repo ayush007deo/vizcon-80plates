@@ -126,7 +126,6 @@ def _audio_file(key: str) -> str:
 # ---------------------------------------------------------------------------
 def _goto(stage: str, **extra) -> None:
     st.session_state["journey_stage"] = stage
-    st.session_state["_scroll_top"] = True
     for k, v in extra.items():
         st.session_state[k] = v
     st.rerun()
@@ -513,32 +512,6 @@ def _country_hub() -> None:
     # Render opened chapters in the order they were opened.
     for cid in opened:
         _render_chapter(cid, iso3, name, profile)
-
-    # Auto-scroll to the most recently revealed chapter.
-    if opened:
-        import streamlit.components.v1 as components
-        components.html(
-            """
-            <script>
-            function scrollToLastChapter() {
-                var doc = window.parent.document;
-                var heads = doc.querySelectorAll('.gj-chapter-head');
-                if (heads.length > 0) {
-                    var last = heads[heads.length - 1];
-                    var rect = last.getBoundingClientRect();
-                    // Only scroll if the element is not already visible
-                    if (rect.top > window.parent.innerHeight || rect.top < 0) {
-                        last.scrollIntoView({behavior: 'smooth', block: 'start'});
-                    }
-                }
-            }
-            // Retry with increasing delays to handle render timing
-            setTimeout(scrollToLastChapter, 500);
-            setTimeout(scrollToLastChapter, 1200);
-            </script>
-            """,
-            height=0,
-        )
 
     # A prominent, always-visible invitation to zoom out — the natural next step, so
     # the Big Picture is easy to find without hunting for a small top-corner button.
@@ -1025,34 +998,6 @@ def _header(stage: str) -> None:
 def render() -> None:
     _inject_css()
     stage = st.session_state.get("journey_stage", "prologue")
-
-    # Scroll to top when navigating between stages
-    if st.session_state.pop("_scroll_top", False):
-        import streamlit.components.v1 as components
-        components.html(
-            """<script>
-            (function() {
-                var doc = window.parent.document;
-                // Try all known Streamlit scroll containers
-                var containers = [
-                    doc.querySelector('[data-testid="stAppViewContainer"]'),
-                    doc.querySelector('[data-testid="stVerticalBlock"]'),
-                    doc.querySelector('.main'),
-                    doc.querySelector('section.main'),
-                    doc.querySelector('[data-testid="stMainBlockContainer"]'),
-                    doc.documentElement,
-                    doc.body
-                ];
-                for (var i = 0; i < containers.length; i++) {
-                    if (containers[i]) {
-                        containers[i].scrollTop = 0;
-                    }
-                }
-                window.parent.scrollTo(0, 0);
-            })();
-            </script>""",
-            height=0,
-        )
 
     _header(stage)
     if stage == "choose":
