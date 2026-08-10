@@ -123,7 +123,7 @@ def video_hero(video_data_uri: str, title: str, subtitle: str,
         f"""
         <style>
         .atw-vhero {{ position:relative; width:100vw; margin-left:calc(50% - 50vw);
-            height:64vh; min-height:440px; max-height:720px; overflow:hidden;
+            height:45vh; min-height:300px; max-height:450px; overflow:hidden;
             margin:4px 0 14px 0; box-shadow:0 26px 60px rgba(43,33,24,0.30); }}
         .atw-vhero video {{ position:absolute; inset:0; width:100%; height:100%;
             object-fit:cover; z-index:0; }}
