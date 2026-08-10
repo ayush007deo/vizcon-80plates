@@ -58,8 +58,8 @@ def _inject_single_page_css() -> None:
 
         /* Give content full width */
         .block-container { max-width: 100% !important; padding-top: 18px !important;
-            padding-bottom: 48px !important; padding-left: 24px !important;
-            padding-right: 24px !important; position: relative; z-index: 1; }
+            padding-bottom: 48px !important; padding-left: 1rem !important;
+            padding-right: 1rem !important; position: relative; z-index: 1; }
 
         /* Fill the empty side gutters with a faint, tasteful culinary watermark so the
            background reads as designed rather than blank. */
