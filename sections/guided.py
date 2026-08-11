@@ -247,11 +247,11 @@ def _bar(center_html: str, *, actions=None, right=None) -> None:
     right   : optional (label, key, stage) rendered on the far right.
     """
     actions = actions or []
-    spec = [1] * len(actions) + [3.2] + ([1.4] if right else [])
+    spec = [0.4] * len(actions) + [3.2] + ([1.4] if right else [])
     cols = st.columns(spec)
     for i, (label, key, stage) in enumerate(actions):
         with cols[i]:
-            if st.button(label, key=key, use_container_width=True):
+            if st.button(label, key=key):
                 _goto(stage)
     with cols[len(actions)]:
         st.markdown(
@@ -1004,7 +1004,7 @@ def _header(stage: str) -> None:
         unsafe_allow_html=True,
     )
 
-    cols = st.columns([1.7, 0.6, 0.7, 0.8, 1.2, 1.0])
+    cols = st.columns([1.7, 1, 1, 1, 1.2, 1.0])
     with cols[0]:
         st.markdown("<div class='gjnav-brand'>🌍&nbsp;<span><b>80</b> Plates</span></div>",
                     unsafe_allow_html=True)
@@ -1016,7 +1016,7 @@ def _header(stage: str) -> None:
             prefix = "✓ " if done and not active else f"{icons.get(stg, '')} "
             if st.button(prefix + label, key=f"gjnav_{stg}",
                          type="primary" if active else "secondary",
-                         disabled=disabled):
+                         use_container_width=True, disabled=disabled):
                 if not active:
                     _goto(stg)
     with cols[5]:
