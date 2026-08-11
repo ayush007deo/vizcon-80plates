@@ -726,22 +726,8 @@ _BIGPICTURE_TABS = [
 
 
 def _bigpicture() -> None:
-    # Scroll to top if navigated here from The Story page
-    if st.session_state.pop("_scroll_top_bigpicture", False):
-        import streamlit.components.v1 as components
-        components.html(
-            """<script>
-            (function() {
-                var doc = window.parent.document;
-                var el = doc.querySelector('[data-testid="stAppViewContainer"]');
-                if (el) el.scrollTop = 0;
-                doc.documentElement.scrollTop = 0;
-                doc.body.scrollTop = 0;
-                window.parent.scrollTo(0, 0);
-            })();
-            </script>""",
-            height=0,
-        )
+    # Track if we need to scroll to top (set by "Explore the big picture" button)
+    _do_scroll = st.session_state.pop("_scroll_top_bigpicture", False)
 
     # Navigation is handled by the clickable header stepper.
     _bar("🌍 The Big Picture")
@@ -761,6 +747,28 @@ def _bigpicture() -> None:
                 module.render()
             except Exception as exc:  # noqa: BLE001
                 st.info(f"This chapter couldn't be loaded right now. ({type(exc).__name__})")
+
+    # Scroll to top after all content is rendered (only when coming from Story page)
+    if _do_scroll:
+        import streamlit.components.v1 as components
+        components.html(
+            """<script>
+            function scrollTop() {
+                var doc = window.parent.document;
+                var el = doc.querySelector('[data-testid="stAppViewContainer"]');
+                if (el) el.scrollTop = 0;
+                var main = doc.querySelector('[data-testid="stMain"]');
+                if (main) main.scrollTop = 0;
+                doc.documentElement.scrollTop = 0;
+                doc.body.scrollTop = 0;
+                window.parent.scrollTo(0, 0);
+            }
+            setTimeout(scrollTop, 100);
+            setTimeout(scrollTop, 500);
+            setTimeout(scrollTop, 1000);
+            </script>""",
+            height=0,
+        )
 
 
 # ---------------------------------------------------------------------------
