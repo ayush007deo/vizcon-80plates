@@ -501,8 +501,10 @@ def _country_hub() -> None:
             if st.button(btn, key=f"gj_open_{iso3}_{cid}", use_container_width=True):
                 if cid in opened:
                     opened.remove(cid)
+                    st.session_state.pop("_just_revealed", None)
                 else:
                     opened.append(cid)
+                    st.session_state["_just_revealed"] = cid
                 st.rerun()
 
     # Progress nudge.
@@ -510,8 +512,36 @@ def _country_hub() -> None:
                 f"{len(CHAPTERS)} chapters</div>", unsafe_allow_html=True)
 
     # Render opened chapters in the order they were opened.
+    just_revealed = st.session_state.pop("_just_revealed", None)
     for cid in opened:
         _render_chapter(cid, iso3, name, profile)
+
+    # Scroll to the newly revealed chapter only (not on every rerun)
+    if just_revealed and just_revealed in opened:
+        import streamlit.components.v1 as components
+        components.html(
+            f"""<script>
+            (function() {{
+                function doScroll() {{
+                    var doc = window.parent.document;
+                    var heads = doc.querySelectorAll('.gj-chapter-head');
+                    // Find the chapter heading that matches the just-revealed one
+                    for (var i = 0; i < heads.length; i++) {{
+                        if (heads[i].textContent.indexOf('{_CHAPTER_TITLES[just_revealed][1]}') !== -1) {{
+                            heads[i].scrollIntoView({{behavior: 'smooth', block: 'start'}});
+                            return;
+                        }}
+                    }}
+                    // Fallback: scroll to last chapter head
+                    if (heads.length > 0) {{
+                        heads[heads.length - 1].scrollIntoView({{behavior: 'smooth', block: 'start'}});
+                    }}
+                }}
+                setTimeout(doScroll, 400);
+            }})();
+            </script>""",
+            height=0,
+        )
 
     # A prominent, always-visible invitation to zoom out — the natural next step, so
     # the Big Picture is easy to find without hunting for a small top-corner button.
