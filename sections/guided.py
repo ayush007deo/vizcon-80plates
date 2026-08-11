@@ -184,8 +184,13 @@ def _inject_css() -> None:
             text-transform:uppercase; letter-spacing:0.22em; font-size:0.78rem;
             color:#F2A93B; margin-bottom:8px; }
         .gj-hero-title { font-family:'Playfair Display',Georgia,serif; font-weight:900;
-            font-size:3rem; line-height:1.03; margin:0; color:#FFF8F1 !important;
-            letter-spacing:-0.5px; text-shadow:0 2px 18px rgba(0,0,0,0.45); }
+            font-size:3rem; line-height:1.03; margin:0; letter-spacing:-0.5px;
+            background: linear-gradient(92deg, #FFFFFF 0%, #FFE7C4 40%, #E8A317 62%, #FFFFFF 100%);
+            background-size: 220% auto; -webkit-background-clip:text; background-clip:text;
+            -webkit-text-fill-color: transparent;
+            animation: gjShine 7s linear infinite;
+            text-shadow: none; }
+        @keyframes gjShine { to { background-position: 220% center; } }
         .gj-hero-tagline { font-family:'Playfair Display',Georgia,serif; font-style:italic;
             font-size:1.25rem; color:#FFE7C4; margin-top:10px; text-shadow:0 2px 12px rgba(0,0,0,0.5); }
         /* Photo-backed chapter cards */
