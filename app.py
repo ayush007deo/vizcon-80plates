@@ -55,11 +55,19 @@ def _inject_single_page_css() -> None:
         [data-testid="collapsedControl"] { display: none !important; }
         button[kind="header"] { display: none !important; }
         header[data-testid="stHeader"] { display: none !important; }
-        #MainMenu { visibility: hidden !important; }
-        footer { visibility: hidden !important; }
+        #MainMenu { visibility: hidden !important; display: none !important; }
+        footer { visibility: hidden !important; display: none !important; }
         [data-testid="stFooter"] { display: none !important; }
+        [data-testid="stToolbar"] { display: none !important; }
         .viewerBadge_container__r5tak { display: none !important; }
         .stDeployButton { display: none !important; }
+        [data-testid="manage-app-button"] { display: none !important; }
+        .styles_viewerBadge__CvC9N { display: none !important; }
+        ._profileContainer_gzau3_53 { display: none !important; }
+        [data-testid="stStatusWidget"] { display: none !important; }
+        .st-emotion-cache-h4xjwg { display: none !important; }
+        [class*="viewerBadge"] { display: none !important; }
+        [class*="StatusWidget"] { display: none !important; }
 
         /* Give content full width */
         .block-container { max-width: 100% !important; padding-top: 18px !important;
