@@ -1016,7 +1016,7 @@ def _header(stage: str) -> None:
             prefix = "✓ " if done and not active else f"{icons.get(stg, '')} "
             if st.button(prefix + label, key=f"gjnav_{stg}",
                          type="primary" if active else "secondary",
-                         use_container_width=True, disabled=disabled):
+                         disabled=disabled):
                 if not active:
                     _goto(stg)
     with cols[5]:
