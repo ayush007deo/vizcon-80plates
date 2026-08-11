@@ -1004,7 +1004,7 @@ def _header(stage: str) -> None:
         unsafe_allow_html=True,
     )
 
-    cols = st.columns([1.7, 1, 1, 1, 1.2, 1.0])
+    cols = st.columns([1.7, 0.6, 0.7, 0.8, 1.2, 1.0])
     with cols[0]:
         st.markdown("<div class='gjnav-brand'>🌍&nbsp;<span><b>80</b> Plates</span></div>",
                     unsafe_allow_html=True)
