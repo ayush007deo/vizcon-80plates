@@ -79,6 +79,7 @@ def _poster(rank: int, row, prefs: tuple[str, ...], total: int) -> None:
     )
     if st.button(f"Open {country}  →", key=f"tp_open_{iso3}", width="stretch"):
         st.session_state["selected_country"] = iso3
+        st.session_state["journey_stage"] = "country"
         st.session_state["tp_opened"] = country
         st.rerun()
 
