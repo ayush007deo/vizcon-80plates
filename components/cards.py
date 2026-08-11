@@ -66,7 +66,6 @@ SECTION_EMOJI = {
     "flavor_wheel": "🎡", "taste_passport": "🛂", "dish_search": "🔎", "insights": "📊",
     "dinner_party": "🍽️", "sources": "📚", "country_story": "📖",
     "journeys": "🧭", "traditions": "🎎", "bigpicture": "📊", "travel": "✈️",
-    "sustainability": "🌱",
 }
 
 
@@ -109,73 +108,64 @@ def big_stat(label: str, value, icon: str = "", ai_derived: bool = False) -> Non
 
 def video_hero(video_data_uri: str, title: str, subtitle: str,
                mime: str = "video/mp4", height: int = 300) -> None:
-    """A cinematic, full-bleed video hero (muted autoplay loop) with the title overlaid.
+    """A cinematic full-bleed video hero (muted autoplay loop) with the title overlaid.
 
-    Rendered directly in the page (not an iframe) so it can break out of the content
-    padding edge-to-edge, matching the country hero banner. `video_data_uri` is a
-    data: URI or a public URL. `height` is ignored in favor of a responsive vh-based
-    height so the video fills as much of the screen as possible on any device.
+    Rendered via components.html (an iframe) so browser autoplay is reliable and the
+    HTML isn't sanitized. `video_data_uri` is a data: URI or a public URL.
     """
     import streamlit as st
 
     t, s = _esc(title), _esc(subtitle)
-    st.markdown(
+    st.html(
         f"""
+        <!doctype html><html><head><meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@600;700&display=swap" rel="stylesheet">
         <style>
-        .atw-vhero {{ position:relative; width:100vw; margin-left:calc(50% - 50vw);
-            height:45vh; min-height:300px; max-height:450px; overflow:hidden;
-            margin:4px 0 14px 0; box-shadow:0 26px 60px rgba(43,33,24,0.30); }}
-        .atw-vhero video {{ position:absolute; inset:0; width:100%; height:100%;
-            object-fit:cover; z-index:0; }}
-        .atw-vhero .vh-tint {{ position:absolute; inset:0; z-index:1;
+          html,body{{margin:0;padding:0;background:transparent;overflow:hidden;}}
+          .hero{{position:relative;height:{height}px;border-radius:18px;overflow:hidden;
+            width:calc(100% + 48px);margin-left:-24px;margin-right:-24px;
+            box-shadow:0 26px 60px rgba(43,33,24,0.30);}}
+          .hero video{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}}
+          .tint{{position:absolute;inset:0;z-index:1;
             background:linear-gradient(105deg,rgba(20,12,8,.82)0%,rgba(20,12,8,.42)46%,rgba(20,12,8,.12)100%),
-                       linear-gradient(0deg,rgba(20,12,8,.6)0%,rgba(20,12,8,0)55%); }}
-        .atw-vhero .vh-glow {{ position:absolute; z-index:1; width:520px; height:520px;
-            right:-120px; top:-160px; border-radius:50%;
+                       linear-gradient(0deg,rgba(20,12,8,.6)0%,rgba(20,12,8,0)55%);}}
+          .glow{{position:absolute;z-index:1;width:520px;height:520px;right:-120px;top:-160px;border-radius:50%;
             background:radial-gradient(closest-side,rgba(242,169,59,.5),rgba(242,169,59,0)70%);
-            filter:blur(10px); animation:atwVGlow 9s ease-in-out infinite alternate; }}
-        @keyframes atwVGlow {{ from{{transform:translate(0,0);opacity:.7;}}
-            to{{transform:translate(-30px,26px);opacity:1;}} }}
-        .atw-vhero .vh-inner {{ position:relative; z-index:2; height:100%; display:flex;
-            flex-direction:column; justify-content:flex-end; padding:32px 56px;
-            box-sizing:border-box; font-family:'Inter',system-ui,sans-serif; color:#fff;
-            max-width:900px; }}
-        .atw-vhero .vh-eyebrow {{ font-weight:700; text-transform:uppercase;
-            letter-spacing:.24em; font-size:.78rem; color:#E8A317 !important; margin-bottom:10px; }}
-        .atw-vhero .vh-title {{ font-family:'Playfair Display',Georgia,serif; font-weight:900;
-            font-size:3.2rem; line-height:1.05; margin:0; letter-spacing:-1px;
-            background:linear-gradient(92deg,#FFF 0%,#FFE7C4 40%,#E8A317 62%,#FFF 100%);
-            background-size:220% auto; -webkit-background-clip:text; background-clip:text;
-            -webkit-text-fill-color:transparent; animation:atwVShine 7s linear infinite; }}
-        @keyframes atwVShine {{ to{{background-position:220% center;}} }}
-        .atw-vhero .vh-sub {{ font-family:'Playfair Display',Georgia,serif; font-style:italic;
-            font-size:1.2rem; margin:10px 0 0 0; max-width:660px; color:#E8A317 !important;
-            text-shadow:0 2px 14px rgba(0,0,0,.6); }}
-        .atw-vhero .vh-scroll {{ display:flex; align-items:center; gap:10px; margin-top:20px;
-            font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
-            color:rgba(255,255,255,.85); }}
-        .atw-vhero .vh-scroll .m {{ width:18px; height:28px; border:2px solid rgba(255,255,255,.7);
-            border-radius:10px; position:relative; }}
-        .atw-vhero .vh-scroll .m::after {{ content:""; position:absolute; left:50%; top:5px;
-            width:3px; height:6px; background:#fff; border-radius:2px; transform:translateX(-50%);
-            animation:atwVScroll 1.6s ease-in-out infinite; }}
-        @keyframes atwVScroll {{ 0%{{opacity:0;top:5px;}} 40%{{opacity:1;}}
-            80%{{opacity:0;top:14px;}} 100%{{opacity:0;}} }}
-        </style>
-        <div class="atw-vhero">
+            filter:blur(10px);animation:glow 9s ease-in-out infinite alternate;}}
+          @keyframes glow{{from{{transform:translate(0,0);opacity:.7;}}to{{transform:translate(-30px,26px);opacity:1;}}}}
+          .inner{{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
+            justify-content:flex-end;padding:28px 36px;box-sizing:border-box;
+            font-family:'Inter',system-ui,sans-serif;color:#fff;max-width:860px;}}
+          .eyebrow{{font-weight:700;text-transform:uppercase;letter-spacing:.24em;font-size:.72rem;
+            color:#E8A317;margin-bottom:8px;}}
+          h1{{font-family:'Playfair Display',Georgia,serif;font-weight:900;font-size:2.8rem;line-height:1.05;
+            margin:0;letter-spacing:-1px;background:linear-gradient(92deg,#FFF 0%,#FFE7C4 40%,#E8A317 62%,#FFF 100%);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 7s linear infinite;
+            /* color set by gradient */
+            
+            
+            }}
+          @keyframes shine{{to{{background-position:220% center;}}}}
+          p{{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:1.1rem;
+            margin:8px 0 0 0;max-width:660px;color:#E8A317;text-shadow:0 2px 14px rgba(0,0,0,.6);}}
+          .scroll{{display:flex;align-items:center;gap:10px;margin-top:16px;font-size:.72rem;
+            letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.85);}}
+          .scroll .m{{width:18px;height:28px;border:2px solid rgba(255,255,255,.7);border-radius:10px;position:relative;}}
+          .scroll .m::after{{content:"";position:absolute;left:50%;top:5px;width:3px;height:6px;background:#fff;
+            border-radius:2px;transform:translateX(-50%);animation:sc 1.6s ease-in-out infinite;}}
+          @keyframes sc{{0%{{opacity:0;top:5px;}}40%{{opacity:1;}}80%{{opacity:0;top:14px;}}100%{{opacity:0;}}}}
+        </style></head>
+        <body><div class="hero">
           <video autoplay muted loop playsinline preload="auto">
             <source src="{video_data_uri}" type="{mime}">
           </video>
-          <div class="vh-tint"></div><div class="vh-glow"></div>
-          <div class="vh-inner">
-            <div class="vh-eyebrow">✦ A Data Journey · Culture Through Food</div>
-            <h1 class="vh-title">{t}</h1>
-            <div class="vh-sub">{s}</div>
-            <div class="vh-scroll"><span class="m"></span>Scroll to begin</div>
+          <div class="tint"></div><div class="glow"></div>
+          <div class="inner">
+            <div class="eyebrow" style="color:#E8A317 !important">✦ A Data Journey · Culture Through Food</div>
+            <h1>{t}</h1><p>{s}</p>
+            <div class="scroll"><span class="m"></span>Scroll to begin</div>
           </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
+        </div></body></html>
+        """
     )
 
 
