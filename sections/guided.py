@@ -565,6 +565,7 @@ def _country_hub() -> None:
     with m:
         if st.button("Explore the big picture  →", type="primary",
                      key="gj_cta_big", use_container_width=True):
+            st.session_state["_scroll_top_bigpicture"] = True
             _goto("bigpicture")
         if st.button("🗺️  Or explore another country", key="gj_cta_another",
                      use_container_width=True):
@@ -725,6 +726,23 @@ _BIGPICTURE_TABS = [
 
 
 def _bigpicture() -> None:
+    # Scroll to top if navigated here from The Story page
+    if st.session_state.pop("_scroll_top_bigpicture", False):
+        import streamlit.components.v1 as components
+        components.html(
+            """<script>
+            (function() {
+                var doc = window.parent.document;
+                var el = doc.querySelector('[data-testid="stAppViewContainer"]');
+                if (el) el.scrollTop = 0;
+                doc.documentElement.scrollTop = 0;
+                doc.body.scrollTop = 0;
+                window.parent.scrollTo(0, 0);
+            })();
+            </script>""",
+            height=0,
+        )
+
     # Navigation is handled by the clickable header stepper.
     _bar("🌍 The Big Picture")
 
