@@ -147,7 +147,7 @@ def render() -> None:
     # Show feedback when a country is opened
     opened = st.session_state.pop("tp_opened", None)
     if opened:
-        st.success(f"🌍 Exploring **{opened}**! Scroll up to the Country Story section to see its full profile.")
+        st.success(f"🌍 Exploring **{opened}**! Navigate to The Story section to see its full profile.")
 
     st.caption(
         f"{len(recs)} destinations, ranked by how many of your {len(prefs)} tastes each "
