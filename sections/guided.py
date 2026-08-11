@@ -497,7 +497,7 @@ def _country_hub() -> None:
                     f"<div class='gj-teaser'>{_html.escape(teaser)}</div></div>",
                     unsafe_allow_html=True,
                 )
-            btn = "Re-read" if done else "Reveal"
+            btn = "Close" if done else "Reveal"
             if st.button(btn, key=f"gj_open_{iso3}_{cid}", use_container_width=True):
                 if cid in opened:
                     opened.remove(cid)
